@@ -1,0 +1,24 @@
+{
+	"name": "@rocketfuel/core",
+	"version": "0.0.1",
+	"description": "The main library when making an app/game using RocketFuel.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/olssonfredrik/rocketfuel-lib-core.git"
+	},
+	"author": "Fredrik Olsson",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"test": "tsc -Build tsconfig.json"
+	},
+	"devDependencies": {
+		"@microsoft/applicationinsights-web": "^2.4.4",
+		"@types/gl-matrix": "2.4.4",
+		"@types/howler": "^2.1.2",
+		"esotericsoftware-spine": "olssonfredrik/esotericsoftware-spine#3.8.0",
+		"gl-matrix": "^2.8.1",
+		"howler": "^2.1.3",
+		"typescript": "^3.8.3"
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"extends": "tslint:recommended",
+	"rules": {
+		"adjacent-overload-signatures": true,
+		"align": false,
+		"array-type": [true, "generic"],
+		"class-name": true,
+		"comment-format": true,
+		"curly": true,
+		"eofline": true,
+		"indent": [true, "tabs"],
+		"interface-name": [true, "always-prefix"],
+		"linebreak-style": [true, "CRLF"],
+		"max-line-length": [true, 180],
+		"no-angle-bracket-type-assertion": true,
+		"no-bitwise": false,
+		"no-consecutive-blank-lines": true,
+		"no-console": false,
+		"no-duplicate-imports": true,
+		"no-empty": false,
+		"no-string-literal": false,
+		"no-trailing-whitespace": true,
+		"object-literal-shorthand": false,
+		"object-literal-sort-keys": false,
+		"one-line": [false, "check-catch", "check-finally", "check-else", "check-open-brace", "check-whitespace"],
+		"semicolon": [true, "always"],
+		"space-before-function-paren": [true, {"anonymous": "always", "method": "never", "named": "never", "constructor": "never", "asyncArrow": "always"}],
+		"space-within-parens": [true, 1],
+		"triple-equals": true,
+		"whitespace": true
+	}
+}
