@@ -45,14 +45,14 @@ export class SdfManager
 			const passes = new Array< RenderPass >();
 			style.Passes.forEach( ( pass ) =>
 			{
-				const shader = this.shaderManager.Get( pass.Shader );
-				const offset = Point2D.FromConfig( pass.Offset );
+				const shader = this.shaderManager.Get( pass.Shader ?? "RFLib/Sdf" );
+				const offset = ( !!pass.Offset ? Point2D.FromConfig( pass.Offset ) : new Point2D() );
 				const uniforms: Map< string, ( number | Array< number > )> = new Map< string, ( number | Array< number > ) >();
-				pass.Uniforms.forEach( ( uniform ) =>
+				pass.Uniforms?.forEach( ( uniform ) =>
 				{
 					uniforms.set( uniform.Name, uniform.Value );
 				} );
-				passes.push( new RenderPass( shader, this.textureManager, pass.Textures, uniforms, offset ) );
+				passes.push( new RenderPass( shader, this.textureManager, pass.Textures ?? [], uniforms, offset ) );
 			} );
 			this.styles.set( key, passes );
 		} );
@@ -119,10 +119,10 @@ interface IFontStyle
 
 interface IRenderPassConfig
 {
-	Uniforms: Array< IUniformConfig >;
-	Offset: IPoint2DConfig;
-	Shader: string;
-	Textures: Array< string >;
+	Uniforms?: Array< IUniformConfig >;
+	Offset?: IPoint2DConfig;
+	Shader?: string;
+	Textures?: Array< string >;
 }
 
 interface IUniformConfig
