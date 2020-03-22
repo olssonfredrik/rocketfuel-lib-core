@@ -24,7 +24,8 @@ export class SoundManager
 
 		Object.keys( config.Groups ).forEach( ( id: string ) =>
 		{
-			const groupConfig = Asserts.AssertDefined( config.Groups[ id ] as IJSONObject, "" );
+			const groupConfig = config.Groups[ id ] as IJSONObject;
+			Asserts.AssertDefined( groupConfig, "Group config not defined: " + id );
 			this.groups.set( id, SoundGroup.FromConfig( groupConfig, server, dataManager, eventManager ) );
 		} );
 

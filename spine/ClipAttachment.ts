@@ -71,7 +71,8 @@ export class ClipAttachment extends spine.ClippingAttachment
 	 */
 	public Render( renderer: WebGLRenderer, camera: Camera ): void
 	{
-		const shader = Asserts.AssertDefinedNotNull( this.Shader );
+		Asserts.AssertDefinedNotNull( this.Shader );
+		const shader = this.Shader;
 		ShaderHelper.SetStandard( shader, camera, this.transform, this.colorMatrix, [] );
 		this.vbo.Draw( renderer, shader.GetAttributeLocations( [ "aVertexPosition" ] ), this.count );
 	}

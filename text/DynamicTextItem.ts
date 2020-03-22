@@ -22,8 +22,9 @@ export class DynamicTextItem implements ITextItem
 		{
 			if( pair.indexOf( "{" ) >= 0 )
 			{
-				let parts = new RegExp( "([^{]*){([^,]+),(.+)" ).exec( pair );
-				parts = Asserts.AssertDefinedNotNull( parts as RegExpExecArray, "Illformatted TextItem: " + text );
+				const parts = new RegExp( "([^{]*){([^,]+),(.+)" ).exec( pair );
+				Asserts.AssertDefinedNotNull( parts, "Illformatted TextItem: " + text );
+				Asserts.Assert( parts.length === 4, "Illformatted TextItem: " + text );
 				this.data.push( new TextValuePair( parts[ 1 ], dataManager.GetRead( parts[ 2 ], parts[ 3 ] ) ) );
 			}
 			else

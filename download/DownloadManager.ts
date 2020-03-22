@@ -157,7 +157,9 @@ export class DownloadManager
 	 */
 	private Get( id: string ): Downloader
 	{
-		return Asserts.AssertDefined< Downloader >( this.list.get( id ), "Unknown resource: " + id );
+		const downloader = this.list.get( id );
+		Asserts.AssertDefined( downloader, "Unknown resource: " + id );
+		return downloader;
 	}
 
 	/**
@@ -176,7 +178,7 @@ export class DownloadManager
 	 */
 	private Add( id: string, url: string, type: string ): void
 	{
-		Asserts.Assert( !this.list.has( id ), "Duplicate entry:" + id );
+		Asserts.Assert( !this.list.has( id ), "Duplicate entry: " + id );
 
 		this.isDone = false;
 		switch( type )

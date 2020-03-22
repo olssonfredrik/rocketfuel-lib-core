@@ -74,8 +74,8 @@ export class NodeFactory
 		}
 
 		const nodeType = JSONUtil.GetAssertedString( data, "NodeType" );
-		let creator = this.createFunctions.get( nodeType );
-		creator = Asserts.AssertDefined( creator, "Unknown node type: \"" + nodeType + "\"" );
+		const creator = this.createFunctions.get( nodeType );
+		Asserts.AssertDefined( creator, "Unknown node type: \"" + nodeType + "\"" );
 
 		return creator( engine, data );
 	}

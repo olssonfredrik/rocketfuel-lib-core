@@ -87,14 +87,14 @@ export class DataManager
 
 		eventManager.Subscribe( "DataManager:SetValue", ( eventId, args ) =>
 		{
-			args = Asserts.AssertDefined( args, "No parameters defined" );
+			Asserts.AssertDefined( args, "No parameters defined" );
 			Asserts.Assert( args.length === 2, "Incorrect number of parameters to \"DataManager:SetValue\" event." );
 			const write = this.GetWrite( "value", args[ 0 ] as string );
 			write.Set( args[ 1 ] as number );
 		} );
 		eventManager.Subscribe( "DataManager:StepValue", ( eventId, args ) =>
 		{
-			args = Asserts.AssertDefined( args, "No parameters defined" );
+			Asserts.AssertDefined( args, "No parameters defined" );
 			Asserts.Assert( args.length === 1, "Incorrect number of parameters to \"DataManager:StepValue\" event." );
 			this.GetWrite( "value", args[ 0 ] as string ).Step();
 		} );

@@ -43,7 +43,9 @@ export class JSONUtil
 	 */
 	public static GetAssertedJSONObject( data: IJSONObject, id: string ): IJSONObject
 	{
-		return Asserts.AssertDefinedNotNull( data[ id ], "Could not find JSONObject with id \"" + id + "\"" ) as IJSONObject;
+		const output = data[ id ] as IJSONObject;
+		Asserts.AssertDefinedNotNull( output, "Could not find JSONObject with id \"" + id + "\"" );
+		return output;
 	}
 
 	/**
@@ -51,7 +53,9 @@ export class JSONUtil
 	 */
 	public static GetAssertedJSONArray( data: IJSONObject, id: string ): IJSONArray
 	{
-		return Asserts.AssertDefinedNotNull( data[ id ], "Could not find JSONArray with id \"" + id + "\"" ) as IJSONArray;
+		const output = data[ id ] as IJSONArray;
+		Asserts.AssertDefinedNotNull( output, "Could not find JSONArray with id \"" + id + "\"" );
+		return output;
 	}
 
 	/**
@@ -59,8 +63,9 @@ export class JSONUtil
 	 */
 	public static GetAssertedString( data: IJSONObject, id: string ): string
 	{
-		const value = data[ id ];
-		return Asserts.AssertType( value, "string", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" ) as string;
+		const value = data[ id ] as string;
+		Asserts.AssertType( value, "string", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
+		return value;
 	}
 
 	/**
@@ -68,8 +73,9 @@ export class JSONUtil
 	 */
 	public static GetAssertedNumber( data: IJSONObject, id: string ): number
 	{
-		const value = data[ id ];
-		return Asserts.AssertType( value, "number", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" ) as number;
+		const value = data[ id ] as number;
+		Asserts.AssertType( value, "number", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
+		return value;
 	}
 
 	/**
@@ -77,7 +83,8 @@ export class JSONUtil
 	 */
 	public static GetAssertedBoolean( data: IJSONObject, id: string ): boolean
 	{
-		const value = data[ id ];
-		return Asserts.AssertType( value, "boolean", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" ) as boolean;
+		const value = data[ id ] as boolean;
+		Asserts.AssertType( value, "boolean", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
+		return value;
 	}
 }

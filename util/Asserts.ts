@@ -2,7 +2,7 @@ export class Asserts
 {
 
 	/**
-	 *
+	 * Throw an error if the condition is false.
 	 */
 	public static Assert( condition: boolean, message?: string ): asserts condition
 	{
@@ -13,29 +13,26 @@ export class Asserts
 	}
 
 	/**
-	 *
+	 * Throw an error if mightBeUndefined is undefined.
 	 */
-	public static AssertDefined< T >( mightBeUndefined: T | undefined, message?: string ): T
+	public static AssertDefined< T >( mightBeUndefined: T | undefined, message?: string ): asserts mightBeUndefined is Exclude< T, null >
 	{
 		Asserts.Assert( mightBeUndefined !== undefined, message );
-		return mightBeUndefined;
 	}
 
 	/**
-	 *
+	 * Throw an error if mightBeUndefinedOrNull is undefined or null.
 	 */
-	public static AssertDefinedNotNull< T >( mightBeUndefinedOrNull: T | undefined, message?: string ): T
+	public static AssertDefinedNotNull< T >( mightBeUndefinedOrNull: T | undefined, message?: string ): asserts mightBeUndefinedOrNull is NonNullable< T >
 	{
 		Asserts.Assert( mightBeUndefinedOrNull !== undefined && mightBeUndefinedOrNull !== null, message );
-		return mightBeUndefinedOrNull;
 	}
 
 	/**
-	 *
+	 * Throw an error if toTypeCheck is not of type T.
 	 */
-	public static AssertType< T >( toTypeCheck: T | undefined, type: string, message?: string ): T
+	public static AssertType< T >( toTypeCheck: T | undefined, type: string, message?: string ): asserts toTypeCheck is T
 	{
 		Asserts.Assert( !!toTypeCheck && typeof toTypeCheck === type, message );
-		return toTypeCheck;
 	}
 }

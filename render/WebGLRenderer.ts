@@ -39,9 +39,11 @@ export class WebGLRenderer
 				case BlendMode.Normal:
 					gl.blendFunc( WebGLRenderingContext.ONE, WebGLRenderingContext.ONE_MINUS_SRC_ALPHA );
 					break;
+
 				case BlendMode.Additive:
 					gl.blendFunc( WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE );
 					break;
+
 				default:
 					Asserts.Assert( false, "Unknown BlendMode:" + state );
 			}
