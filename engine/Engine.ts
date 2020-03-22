@@ -63,7 +63,8 @@ export class Engine
 		this.SoundManager = new SoundManager();
 		this.FullscreenManager = new FullscreenManager( fullscreenElement );
 		HtmlHelper.ListenerToEvent( this.EventManager );
-		this.EventManager.Subscribe( "Page:Reload", () => { HtmlHelper.Reload(); } );
+		this.EventManager.Subscribe( "Page:Reload", () => HtmlHelper.Reload() );
+		this.EventManager.Subscribe( "Page:OpenUrl", ( id, args ) => HtmlHelper.OpenUrl( args?.[ 0 ] as string ) );
 
 		this.DownloadManager = new DownloadManager( this.EventManager, config.resource_server, config.resource_file );
 		this.inited = this.DownloadManager.Ready().then( () =>
