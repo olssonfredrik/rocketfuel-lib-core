@@ -23,7 +23,7 @@ export class Asserts
 	/**
 	 * Throw an error if mightBeUndefinedOrNull is undefined or null.
 	 */
-	public static AssertDefinedNotNull< T >( mightBeUndefinedOrNull: T | undefined, message?: string ): asserts mightBeUndefinedOrNull is NonNullable< T >
+	public static AssertNotNull< T >( mightBeUndefinedOrNull: T | undefined, message?: string ): asserts mightBeUndefinedOrNull is NonNullable< T >
 	{
 		Asserts.Assert( mightBeUndefinedOrNull !== undefined && mightBeUndefinedOrNull !== null, message );
 	}

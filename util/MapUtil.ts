@@ -16,7 +16,7 @@ export class MapUtil
 	public static AssertedGet< T >( map: Map< string, T >, key: string, message?: string ): T
 	{
 		const value = map.get( key );
-		Asserts.AssertDefinedNotNull( value, message );
+		Asserts.AssertNotNull( value, message );
 		return value;
 	}
 }

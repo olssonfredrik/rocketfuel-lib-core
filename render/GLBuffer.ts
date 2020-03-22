@@ -11,7 +11,7 @@ export class GLBuffer
 	private static Create( renderer: WebGLRenderer ): WebGLBuffer
 	{
 		const buffer = renderer.GetContext().createBuffer();
-		Asserts.AssertDefinedNotNull( buffer, "Failed to create buffer" );
+		Asserts.AssertNotNull( buffer, "Failed to create buffer" );
 		return buffer;
 	}
 

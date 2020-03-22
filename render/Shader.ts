@@ -46,7 +46,7 @@ export class Shader
 	 */
 	public SetActive(): void
 	{
-		Asserts.AssertDefinedNotNull( this.program, "Tried to use uncompiled shader." );
+		Asserts.AssertNotNull( this.program, "Tried to use uncompiled shader." );
 
 		this.renderer.GetContext().useProgram( this.program );
 	}
@@ -78,7 +78,7 @@ export class Shader
 		const fragmentShader = this.CompileShader( gl, this.fragmentSource, WebGLRenderingContext.FRAGMENT_SHADER );
 
 		const shaderProgram = gl.createProgram();
-		Asserts.AssertDefinedNotNull( shaderProgram, "Failed to create shader program!" );
+		Asserts.AssertNotNull( shaderProgram, "Failed to create shader program!" );
 
 		gl.attachShader( shaderProgram, vertexShader );
 		gl.attachShader( shaderProgram, fragmentShader );
@@ -93,7 +93,7 @@ export class Shader
 		for( let i = 0; i < attributeCount; i++ )
 		{
 			const attribute = gl.getActiveAttrib( shaderProgram, i );
-			Asserts.AssertDefinedNotNull( attribute, "Failed to get attribute" );
+			Asserts.AssertNotNull( attribute, "Failed to get attribute" );
 			const location = gl.getAttribLocation( shaderProgram, attribute.name );
 			this.attributeLocations.set( attribute.name, location );
 		}
@@ -107,7 +107,7 @@ export class Shader
 	private CompileShader( gl: WebGLRenderingContext, shaderSource: string, shaderType: number ): WebGLShader
 	{
 		const shader = gl.createShader( shaderType );
-		Asserts.AssertDefinedNotNull( shader, "Failed to create shader." );
+		Asserts.AssertNotNull( shader, "Failed to create shader." );
 
 		gl.shaderSource( shader, shaderSource );
 		gl.compileShader( shader );

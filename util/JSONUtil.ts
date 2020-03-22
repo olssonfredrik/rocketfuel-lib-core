@@ -44,7 +44,7 @@ export class JSONUtil
 	public static GetAssertedJSONObject( data: IJSONObject, id: string ): IJSONObject
 	{
 		const output = data[ id ] as IJSONObject;
-		Asserts.AssertDefinedNotNull( output, "Could not find JSONObject with id \"" + id + "\"" );
+		Asserts.AssertNotNull( output, "Could not find JSONObject with id \"" + id + "\"" );
 		return output;
 	}
 
@@ -54,7 +54,7 @@ export class JSONUtil
 	public static GetAssertedJSONArray( data: IJSONObject, id: string ): IJSONArray
 	{
 		const output = data[ id ] as IJSONArray;
-		Asserts.AssertDefinedNotNull( output, "Could not find JSONArray with id \"" + id + "\"" );
+		Asserts.AssertNotNull( output, "Could not find JSONArray with id \"" + id + "\"" );
 		return output;
 	}
 

@@ -13,7 +13,7 @@ export class Texture
 	public constructor( renderer: WebGLRenderer, image: HTMLImageElement )
 	{
 		const texture = renderer.GetContext().createTexture();
-		Asserts.AssertDefinedNotNull( texture, "Failed to create texture" );
+		Asserts.AssertNotNull( texture, "Failed to create texture" );
 		this.WebGLTexture = texture;
 
 		const gl = renderer.GetContext();
