@@ -27,12 +27,4 @@ export class Asserts
 	{
 		Asserts.Assert( mightBeUndefinedOrNull !== undefined && mightBeUndefinedOrNull !== null, message );
 	}
-
-	/**
-	 * Throw an error if toTypeCheck is not of type T.
-	 */
-	public static AssertType< T >( toTypeCheck: T | undefined, type: string, message?: string ): asserts toTypeCheck is T
-	{
-		Asserts.Assert( !!toTypeCheck && typeof toTypeCheck === type, message );
-	}
 }

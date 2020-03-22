@@ -64,7 +64,7 @@ export class JSONUtil
 	public static GetAssertedString( data: IJSONObject, id: string ): string
 	{
 		const value = data[ id ] as string;
-		Asserts.AssertType( value, "string", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
+		Asserts.Assert( typeof value === "string", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
 		return value;
 	}
 
@@ -74,7 +74,7 @@ export class JSONUtil
 	public static GetAssertedNumber( data: IJSONObject, id: string ): number
 	{
 		const value = data[ id ] as number;
-		Asserts.AssertType( value, "number", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
+		Asserts.Assert( typeof value === "number", "Expected number but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
 		return value;
 	}
 
@@ -84,7 +84,7 @@ export class JSONUtil
 	public static GetAssertedBoolean( data: IJSONObject, id: string ): boolean
 	{
 		const value = data[ id ] as boolean;
-		Asserts.AssertType( value, "boolean", "Expected string but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
+		Asserts.Assert( typeof value === "boolean", "Expected boolean but found \"" + value + "\" of type \"" + ( typeof value ) + "\"" );
 		return value;
 	}
 }
