@@ -126,7 +126,7 @@ export class HtmlHelper
 			canvas.width = newSize.X;
 			canvas.height = newSize.Y;
 
-			canvasTransform.SetTransform( pixelSize.Scale( 0.5 / scale ), scale / pixelRatio );
+			canvasTransform.SetTransform( pixelSize.Scale( 0.5 / pixelRatio ), scale / pixelRatio );
 		};
 
 		window.onorientationchange = resize;

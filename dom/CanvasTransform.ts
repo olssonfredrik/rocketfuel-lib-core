@@ -19,7 +19,7 @@ export class CanvasTransform
 	public SetTransform( position: Point2D, scale: number )
 	{
 		const offset = new Point2D( -this.canvas.width, -this.canvas.height ).Scale( 0.5 ).Add( position );
-		this.SetStyleTransform( this.Scale( scale ) + this.Translate( offset ) );
+		this.SetStyleTransform( this.Translate( offset ) + this.Scale( scale ) );
 	}
 
 	/**
