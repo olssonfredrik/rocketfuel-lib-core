@@ -68,6 +68,6 @@ export interface ITransformValueNodeConfig
 {
 	Name: string;
 	Value: string;
-	Scale?: number;
 	Child: IJSONObject;
+	Scale?: number;
 }

@@ -16,6 +16,7 @@ import { InputNode } from "./InputNode";
 import { InputSliderNode } from "./InputSliderNode";
 import { NullNode } from "./NullNode";
 import { SingleChildNode } from "./SingleChildNode";
+import { SpriteNode } from "./SpriteNode";
 import { TexturedQuadNode } from "./TexturedQuadNode";
 import { TransformNode } from "./TransformNode";
 import { TransformValueNode } from "./TransformValueNode";
@@ -46,6 +47,7 @@ export class NodeFactory
 		this.Set( "SpineNode", SpineNode.Create );
 		this.Set( "StatelessParticleSystemNode", StatelessParticleSystemNode.Create );
 		this.Set( "PixiParticleSystemNode", PixiParticleSystemNode.Create );
+		this.Set( "SpriteNode", SpriteNode.Create );
 		this.Set( "StateSpineNode", StateSpineNode.Create );
 		this.Set( "TextNode", TextNode.Create );
 		this.Set( "TexturedQuadNode", TexturedQuadNode.Create );

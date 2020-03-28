@@ -3,17 +3,17 @@ import { IndexBuffer, Shader, TextureManager, VertexBuffer, VertexBufferObject, 
 import { IJSONObject, JSONUtil, ShaderHelper } from "../util";
 import { LeafNode } from "./LeafNode";
 
-export class TexturedQuadNode extends LeafNode
+export class SpriteNode extends LeafNode
 {
 
 	/**
 	 *
 	 */
-	public static Create( engine: Engine, config: IJSONObject ): TexturedQuadNode
+	public static Create( engine: Engine, config: IJSONObject ): SpriteNode
 	{
-		const nodeConfig = JSONUtil.AsType< ITexturedRectNodeConfig >( config );
+		const nodeConfig = JSONUtil.AsType< ISpriteNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/TexturedRect" );
-		const node = new TexturedQuadNode( nodeConfig.Name, engine.Renderer, engine.TextureManager, shader, nodeConfig.Textures, nodeConfig.Width, nodeConfig.Height );
+		const node = new SpriteNode( nodeConfig.Name, engine.Renderer, engine.TextureManager, shader, nodeConfig.Texture );
 		return node;
 	}
 
@@ -23,19 +23,20 @@ export class TexturedQuadNode extends LeafNode
 	private textureManager: TextureManager;
 
 	/**
-	 * Creates an instance of TexturedRectNode.
+	 * Creates an instance of SpriteNode.
 	 */
-	public constructor( name: string, renderer: WebGLRenderer, textureManager: TextureManager, shader: Shader, textures: Array< string >, width: number, height: number )
+	public constructor( name: string, renderer: WebGLRenderer, textureManager: TextureManager, shader: Shader, texture: string )
 	{
 		super( name );
 
-		this.textures = textures;
+		this.textures = [ texture ];
 		this.textureManager = textureManager;
 
 		this.shader = shader;
 
-		const halfWidth = width / 2;
-		const halfHeight = height / 2;
+		const size = textureManager.Size( texture );
+		const halfWidth = size.X / 2;
+		const halfHeight = size.Y / 2;
 		const indexBuffer = new IndexBuffer( renderer, new Uint16Array( [ 0, 2, 1, 0, 3, 2 ] ) );
 		const verts: Array< number > =
 		[
@@ -61,11 +62,9 @@ export class TexturedQuadNode extends LeafNode
 	}
 }
 
-interface ITexturedRectNodeConfig
+interface ISpriteNodeConfig
 {
 	Name: string;
-	Textures: Array< string >;
-	Width: number;
-	Height: number;
+	Texture: string;
 	Shader?: string;
 }

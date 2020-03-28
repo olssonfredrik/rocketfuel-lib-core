@@ -15,7 +15,6 @@ export * from "./DebugNode";
 export * from "./FloatNode";
 export * from "./InputNode";
 export * from "./InputSliderNode";
-export * from "./QuadNode";
 export * from "./TexturedQuadNode";
 export * from "./TransformNode";
 export * from "./TransformValueNode";

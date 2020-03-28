@@ -22,17 +22,17 @@ export class SpineNode extends CompositeNode
 	public static Create( engine: Engine, config: IJSONObject ): SpineNode
 	{
 		const nodeConfig = JSONUtil.AsType< ISpineNodeConfig >( config );
-		const shader = engine.ShaderManager.Get( nodeConfig.Shader );
+		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
 		const node = new SpineNode( nodeConfig.Name, engine.Renderer, skeleton, engine.TextureManager, engine.ShaderManager, shader );
 		Object.keys( nodeConfig.Overrides ?? {} ).forEach( ( key ) =>
 		{
-			const value = nodeConfig.Overrides[ key ] as IJSONObject;
+			const value = JSONUtil.GetAssertedJSONObject( nodeConfig.Overrides ?? {}, key );
 			const parts = key.split( ":" );
 			node.OverrideNode( parts[ 0 ], parts[ 1 ], engine.NodeFactory.Create( engine, value ) );
 		} );
 
-		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.Play( event.Animation, event.Loop ) ) );
+		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.Play( event.Animation, event.Loop ?? false ) ) );
 
 		return node;
 	}
@@ -249,14 +249,14 @@ interface ISpineNodeConfig
 {
 	Name: string;
 	Skeleton: string;
-	Shader: string;
-	Overrides: IJSONObject;
-	Events: Array< IEventAnimation >;
+	Shader?: string;
+	Overrides?: IJSONObject;
+	Events?: Array< IEventAnimation >;
 }
 
 interface IEventAnimation
 {
 	Id: string;
 	Animation: string;
-	Loop: boolean;
+	Loop?: boolean;
 }

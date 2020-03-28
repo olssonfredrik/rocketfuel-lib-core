@@ -68,7 +68,7 @@ export class ButtonNode extends CompositeNode
 
 interface IButtonNodeConfig
 {
+	Name: string;
 	Player: IJSONObject;
 	Events: Array< IEvent >;
-	Name: string;
 }
