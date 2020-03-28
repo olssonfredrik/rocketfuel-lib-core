@@ -14,7 +14,7 @@ export class ValueBooleanNode extends SingleChildNode
 	public static Create( engine: Engine, config: IJSONObject ): ValueBooleanNode
 	{
 		const nodeConfig = JSONUtil.AsType< IValueBooleanNodeConfig >( config );
-		const value = engine.DataManager.GetRead( "value", nodeConfig.Value );
+		const value = engine.DataManager.GetRead( "Value", nodeConfig.Value );
 		const trueNode = engine.NodeFactory.Create( engine, nodeConfig.TrueNode );
 		const falseNode = engine.NodeFactory.Create( engine, nodeConfig.FalseNode );
 

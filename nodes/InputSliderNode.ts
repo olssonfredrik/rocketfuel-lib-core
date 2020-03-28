@@ -15,7 +15,7 @@ export class InputSliderNode extends LeafNode
 	{
 		const nodeConfig = JSONUtil.AsType< IInputSliderNodeConfig >( config );
 		const inputRegion = InputRegion.FromConfig( nodeConfig.Input );
-		const value = engine.DataManager.GetWrite( "value", nodeConfig.Value );
+		const value = engine.DataManager.GetWrite( "Value", nodeConfig.Value );
 		return new InputSliderNode( nodeConfig.Name, engine.InputManager, inputRegion, value, nodeConfig.ActiveRange, nodeConfig.Horizontal );
 	}
 

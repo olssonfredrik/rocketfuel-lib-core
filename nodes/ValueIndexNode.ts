@@ -13,7 +13,7 @@ export class ValueIndexNode extends SingleChildNode
 	public static Create( engine: Engine, config: IJSONObject ): ValueIndexNode
 	{
 		const nodeConfig = JSONUtil.AsType< IValueIndexNodeConfig >( config );
-		const value = engine.DataManager.GetRead( "value", nodeConfig.Value );
+		const value = engine.DataManager.GetRead( "Value", nodeConfig.Value );
 		const children = nodeConfig.Children.map( ( child ) =>
 		{
 			return engine.NodeFactory.Create( engine, child );

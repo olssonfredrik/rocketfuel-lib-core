@@ -21,7 +21,7 @@ export class SoundGroup
 		// set volume
 		if( !!groupConfig.VolumeData )
 		{
-			const volume = dataManager.GetRead( "value", groupConfig.VolumeData );
+			const volume = dataManager.GetRead( "Value", groupConfig.VolumeData );
 			soundGroup.SetVolume( volume.Get() );
 			volume.OnChange( ( value ) => soundGroup.SetVolume( value ) );
 		}

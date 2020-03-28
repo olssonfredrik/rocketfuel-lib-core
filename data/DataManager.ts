@@ -23,7 +23,7 @@ export class DataManager
 	/**
 	 *
 	 */
-	public GetRead( type: string, id: string ): IDataRead< number >
+	public GetRead( type: "Value" | "Money", id: string ): IDataRead< number >
 	{
 		const key = type + ":" + id;
 		const data = MapUtil.AssertedGet( this.map, key, "No data available of type: \"" + type + "\" with id: \"" + id +"\"" );
@@ -33,7 +33,7 @@ export class DataManager
 	/**
 	 *
 	 */
-	public GetWrite( type: string, id: string ): IDataWrite< number >
+	public GetWrite( type: "Value" | "Money", id: string ): IDataWrite< number >
 	{
 		const key = type + ":" + id;
 		const data = MapUtil.AssertedGet( this.map, key, "No data available of type: \"" + type + "\" with id: \"" + id +"\"" );
@@ -89,14 +89,14 @@ export class DataManager
 		{
 			Asserts.AssertDefined( args, "No parameters defined" );
 			Asserts.Assert( args.length === 2, "Incorrect number of parameters to \"DataManager:SetValue\" event." );
-			const write = this.GetWrite( "value", args[ 0 ] as string );
+			const write = this.GetWrite( "Value", args[ 0 ] as string );
 			write.Set( args[ 1 ] as number );
 		} );
 		eventManager.Subscribe( "DataManager:StepValue", ( eventId, args ) =>
 		{
 			Asserts.AssertDefined( args, "No parameters defined" );
 			Asserts.Assert( args.length === 1, "Incorrect number of parameters to \"DataManager:StepValue\" event." );
-			this.GetWrite( "value", args[ 0 ] as string ).Step();
+			this.GetWrite( "Value", args[ 0 ] as string ).Step();
 		} );
 	}
 }

@@ -29,8 +29,8 @@ export class SoundManager
 			this.groups.set( id, SoundGroup.FromConfig( groupConfig, server, dataManager, eventManager ) );
 		} );
 
-		const muteRead = dataManager.GetRead( "value", "Sound:Mute" );
-		const muteWrite = dataManager.GetWrite( "value", "Sound:Mute" );
+		const muteRead = dataManager.GetRead( "Value", "Sound:Mute" );
+		const muteWrite = dataManager.GetWrite( "Value", "Sound:Mute" );
 		eventManager.Subscribe( "Sound:ToggleMute", () =>
 		{
 			const mute = ( muteRead.Get() === 0 ? true : false );

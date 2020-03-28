@@ -14,7 +14,7 @@ export class TransformValueNode extends SingleChildNode
 	public static Create( engine: Engine, config: IJSONObject ): TransformValueNode
 	{
 		const nodeConfig = JSONUtil.AsType< ITransformValueNodeConfig >( config );
-		const node = new TransformValueNode( nodeConfig.Name, engine.DataManager.GetRead( "value", nodeConfig.Value ), nodeConfig.Scale );
+		const node = new TransformValueNode( nodeConfig.Name, engine.DataManager.GetRead( "Value", nodeConfig.Value ), nodeConfig.Scale );
 		node.SetChild( engine.NodeFactory.Create( engine, nodeConfig.Child ) );
 		return node;
 	}

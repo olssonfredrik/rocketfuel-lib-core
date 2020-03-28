@@ -43,7 +43,7 @@ export class FullscreenManager
 	 */
 	public Init( eventManager: EventManager, dataManager: DataManager ): void
 	{
-		const fullscreenValue = dataManager.GetWrite( "value", "Fullscreen:Active" );
+		const fullscreenValue = dataManager.GetWrite( "Value", "Fullscreen:Active" );
 		const hasFullscreen = this.HasFullscreen();
 
 		if( hasFullscreen )
@@ -67,7 +67,7 @@ export class FullscreenManager
 				fullscreenValue.Set( isFullscreen ? 1 : 0 );
 			} );
 		}
-		dataManager.GetWrite( "value", "Fullscreen:Supported" ).Set( hasFullscreen ? 1 : 0 );
+		dataManager.GetWrite( "Value", "Fullscreen:Supported" ).Set( hasFullscreen ? 1 : 0 );
 	}
 
 	/**
