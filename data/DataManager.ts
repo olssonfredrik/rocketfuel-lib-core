@@ -16,8 +16,8 @@ export class DataManager
 	public constructor()
 	{
 		this.map = new Map< string, DataValue >();
-		this.moneyPrefix = "money:";
-		this.valuePrefix = "value:";
+		this.moneyPrefix = "Money:";
+		this.valuePrefix = "Value:";
 	}
 
 	/**
