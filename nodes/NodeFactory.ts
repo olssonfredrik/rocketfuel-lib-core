@@ -14,6 +14,7 @@ import { INode } from "./INode";
 import { InputConsumerNode } from "./InputConsumerNode";
 import { InputNode } from "./InputNode";
 import { InputSliderNode } from "./InputSliderNode";
+import { NinePatchNode } from "./NinePatchNode";
 import { NullNode } from "./NullNode";
 import { SingleChildNode } from "./SingleChildNode";
 import { SpriteNode } from "./SpriteNode";
@@ -55,6 +56,7 @@ export class NodeFactory
 		this.Set( "TransformValueNode", TransformValueNode.Create );
 		this.Set( "ValueBooleanNode", ValueBooleanNode.Create );
 		this.Set( "ValueIndexNode", ValueIndexNode.Create );
+		this.Set( "NinePatchNode", NinePatchNode.Create );
 	}
 
 	/**
