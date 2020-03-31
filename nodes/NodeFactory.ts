@@ -16,8 +16,10 @@ import { InputNode } from "./InputNode";
 import { InputSliderNode } from "./InputSliderNode";
 import { NinePatchNode } from "./NinePatchNode";
 import { NullNode } from "./NullNode";
+import { RectangleNode } from "./RectangleNode";
 import { SingleChildNode } from "./SingleChildNode";
 import { SpriteNode } from "./SpriteNode";
+import { StencilNode } from "./StencilNode";
 import { TexturedQuadNode } from "./TexturedQuadNode";
 import { TransformNode } from "./TransformNode";
 import { TransformValueNode } from "./TransformValueNode";
@@ -57,6 +59,8 @@ export class NodeFactory
 		this.Set( "ValueBooleanNode", ValueBooleanNode.Create );
 		this.Set( "ValueIndexNode", ValueIndexNode.Create );
 		this.Set( "NinePatchNode", NinePatchNode.Create );
+		this.Set( "StencilNode", StencilNode.Create );
+		this.Set( "RectangleNode", RectangleNode.Create );
 	}
 
 	/**

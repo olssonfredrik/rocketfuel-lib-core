@@ -11,7 +11,7 @@ export class TexturedQuadNode extends LeafNode
 	 */
 	public static Create( engine: Engine, config: IJSONObject ): TexturedQuadNode
 	{
-		const nodeConfig = JSONUtil.AsType< ITexturedRectNodeConfig >( config );
+		const nodeConfig = JSONUtil.AsType< ITexturedQuadNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/TexturedRect" );
 		const node = new TexturedQuadNode( nodeConfig.Name, engine.Renderer, engine.TextureManager, shader, nodeConfig.Textures, nodeConfig.Width, nodeConfig.Height );
 		return node;
@@ -61,7 +61,7 @@ export class TexturedQuadNode extends LeafNode
 	}
 }
 
-interface ITexturedRectNodeConfig
+interface ITexturedQuadNodeConfig
 {
 	Name: string;
 	Textures: Array< string >;
