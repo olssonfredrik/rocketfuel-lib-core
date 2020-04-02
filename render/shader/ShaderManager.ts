@@ -1,7 +1,7 @@
-import { DownloadManager } from "../download";
-import { IJSONArray, MapUtil } from "../util";
+import { DownloadManager } from "../../download";
+import { IJSONArray, MapUtil } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 import { Shader } from "./Shader";
-import { WebGLRenderer } from "./WebGLRenderer";
 
 export class ShaderManager
 {

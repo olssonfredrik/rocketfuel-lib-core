@@ -2,7 +2,7 @@ import { spine } from "esotericsoftware-spine";
 import { DownloadManager } from "../download";
 import { TextureManager, WebGLRenderer } from "../render";
 import { MapUtil } from "../util";
-import { AttachmentLoader } from "./AttachmentLoader";
+import { AttachmentLoader } from "./attachment";
 
 export class SpineManager
 {

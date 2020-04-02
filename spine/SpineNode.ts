@@ -6,10 +6,7 @@ import { CompositeNode, INode } from "../nodes";
 import { IPlayer } from "../player";
 import { Shader, ShaderManager, TextureManager, WebGLRenderer } from "../render";
 import { IJSONObject, JSONUtil, Logging } from "../util";
-import { ClipAttachment } from "./ClipAttachment";
-import { MeshAttachment } from "./MeshAttachment";
-import { NodeAttachment } from "./NodeAttachment";
-import { RegionAttachment } from "./RegionAttachment";
+import { ClipAttachment, MeshAttachment, NodeAttachment, RegionAttachment } from "./attachment";
 import { SpineHelper } from "./SpineHelper";
 import { SpinePlayer } from "./SpinePlayer";
 

@@ -1,6 +1,6 @@
-import { Asserts, Logging } from "../util";
+import { Asserts, Logging } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 import { Uniforms } from "./Uniforms";
-import { WebGLRenderer } from "./WebGLRenderer";
 
 export class Shader
 {

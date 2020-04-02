@@ -1,6 +1,6 @@
-import { Camera } from "../engine";
-import { Asserts } from "../util";
-import { WebGLRenderer } from "./WebGLRenderer";
+import { Camera } from "../../engine";
+import { Asserts } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 export class StencilStack
 {

@@ -1,8 +1,8 @@
 import { Point2D } from "../math";
 import { Asserts } from "../util";
 import { BlendMode } from "./BlendMode";
-import { StateStack } from "./StateStack";
-import { StencilStack } from "./StencilStack";
+import { StateStack } from "./stack/StateStack";
+import { StencilStack } from "./stack/StencilStack";
 
 export class WebGLRenderer
 {

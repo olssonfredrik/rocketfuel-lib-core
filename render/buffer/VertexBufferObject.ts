@@ -1,6 +1,6 @@
+import { WebGLRenderer } from "../WebGLRenderer";
 import { IndexBuffer } from "./IndexBuffer";
 import { VertexBuffer } from "./VertexBuffer";
-import { WebGLRenderer } from "./WebGLRenderer";
 
 export class VertexBufferObject
 {

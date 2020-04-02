@@ -1,10 +1,10 @@
 import { spine } from "esotericsoftware-spine";
 import { mat4 } from "gl-matrix";
-import { Camera } from "../engine";
-import { Transform } from "../math";
-import { INode } from "../nodes";
-import { WebGLRenderer } from "../render";
-import { SpineHelper } from "./SpineHelper";
+import { Camera } from "../../engine";
+import { Transform } from "../../math";
+import { INode } from "../../nodes";
+import { WebGLRenderer } from "../../render";
+import { SpineHelper } from "../SpineHelper";
 
 export class NodeAttachment extends spine.RegionAttachment implements INode
 {

@@ -1,6 +1,6 @@
-import { Point2D } from "../math";
-import { Asserts } from "../util";
-import { WebGLRenderer } from "./WebGLRenderer";
+import { Point2D } from "../../math";
+import { Asserts } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 export class Texture
 {

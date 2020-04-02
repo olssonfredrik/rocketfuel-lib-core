@@ -1,8 +1,8 @@
 import { spine } from "esotericsoftware-spine";
-import { Camera } from "../engine";
-import { Transform } from "../math";
-import { IndexBuffer, Shader, TextureManager, VertexBuffer, VertexBufferObject, WebGLRenderer } from "../render";
-import { Asserts, ShaderHelper } from "../util";
+import { Camera } from "../../engine";
+import { Transform } from "../../math";
+import { IndexBuffer, Shader, TextureManager, VertexBuffer, VertexBufferObject, WebGLRenderer } from "../../render";
+import { Asserts, ShaderHelper } from "../../util";
 
 export class ClipAttachment extends spine.ClippingAttachment
 {

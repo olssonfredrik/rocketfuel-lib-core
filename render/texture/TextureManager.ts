@@ -1,9 +1,9 @@
-import { DownloadManager } from "../download";
-import { Point2D } from "../math";
-import { IJSONArray, MapUtil } from "../util";
+import { DownloadManager } from "../../download";
+import { Point2D } from "../../math";
+import { IJSONArray, MapUtil } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 import { SubTexture } from "./SubTexture";
 import { Texture } from "./Texture";
-import { WebGLRenderer } from "./WebGLRenderer";
 
 export class TextureManager
 {

@@ -1,8 +1,6 @@
 import { spine } from "esotericsoftware-spine";
 import { mat4 } from "gl-matrix";
-import { MeshAttachment } from "./MeshAttachment";
-import { NodeAttachment } from "./NodeAttachment";
-import { RegionAttachment } from "./RegionAttachment";
+import { MeshAttachment, NodeAttachment, RegionAttachment } from "./attachment";
 
 export class SpineHelper
 {

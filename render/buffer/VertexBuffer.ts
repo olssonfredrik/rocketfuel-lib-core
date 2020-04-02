@@ -1,5 +1,5 @@
+import { WebGLRenderer } from "../WebGLRenderer";
 import { GLBuffer } from "./GLBuffer";
-import { WebGLRenderer } from "./WebGLRenderer";
 
 interface ILocation { size: number; offset: number; }
 

@@ -1,5 +1,5 @@
-import { Asserts } from "../util";
-import { WebGLRenderer } from "./WebGLRenderer";
+import { Asserts } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 type BufferData = Float32Array | Uint16Array;
 

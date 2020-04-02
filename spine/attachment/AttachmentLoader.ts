@@ -1,5 +1,5 @@
 import { spine } from "esotericsoftware-spine";
-import { TextureManager, WebGLRenderer } from "../render";
+import { TextureManager, WebGLRenderer } from "../../render";
 import { ClipAttachment } from "./ClipAttachment";
 import { MeshAttachment } from "./MeshAttachment";
 import { NodeAttachment } from "./NodeAttachment";

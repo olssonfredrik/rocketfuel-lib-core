@@ -1,4 +1,4 @@
-import { Point2D } from "../math";
+import { Point2D } from "../../math";
 import { Texture } from "./Texture";
 
 export class SubTexture

@@ -1,5 +1,5 @@
-import { Asserts } from "../util";
-import { WebGLRenderer } from "./WebGLRenderer";
+import { Asserts } from "../../util";
+import { WebGLRenderer } from "../WebGLRenderer";
 
 export class Uniforms
 {
