@@ -6,7 +6,13 @@ import { StencilStack } from "./stack/StencilStack";
 
 export class WebGLRenderer
 {
-	public readonly Size: Point2D;
+	/** The "screen" size in world units */
+	public readonly WorldSize: Point2D;
+	/** The "screen" size in pixels */
+	public readonly RenderSize: Point2D;
+
+	public readonly UseStencil: boolean;
+	public readonly UseDepth: boolean;
 
 	public readonly AlphaMaskStack: StateStack< boolean >;
 	public readonly BlendModeStack: StateStack< BlendMode >;
@@ -22,7 +28,7 @@ export class WebGLRenderer
 	/**
 	 *
 	 */
-	public constructor( glContext: WebGLRenderingContext )
+	public constructor( glContext: WebGLRenderingContext, startSize: Point2D, useStencil: boolean = true, useDepth: boolean = false )
 	{
 		const gl = glContext;
 		gl.getExtension( "OES_standard_derivatives" );
@@ -66,8 +72,11 @@ export class WebGLRenderer
 
 		this.StencilStack = new StencilStack();
 		this.vertexAttribCount = 0;
-		this.Size = new Point2D( 1920, 960 );
+		this.RenderSize = startSize.Clone();
+		this.WorldSize = startSize.Clone();
 		this.gl = gl;
+		this.UseDepth = useDepth;
+		this.UseStencil = useStencil;
 	}
 
 	/**

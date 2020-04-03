@@ -52,14 +52,14 @@ export class HtmlHelper
 	/**
 	 * Try to create a WebGL Context. Will return undefined on fail.
 	 */
-	public static CreateWebGLContext( canvas: HTMLCanvasElement ): WebGLRenderingContext | undefined
+	public static CreateWebGLContext( canvas: HTMLCanvasElement, useStencil: boolean = true, useDepth: boolean = false ): WebGLRenderingContext | undefined
 	{
 		// TODO: Handle context lost/restored
 		const contextIdList: Array< string > = [ "webgl", "experimental-webgl", "webkit-3d", "moz-webgl" ];
 
 		for( const contextId of contextIdList )
 		{
-			const context = canvas.getContext( contextId, { stencil: true, premultipliedAlpha: true, alpha: false, antialias: false } );
+			const context = canvas.getContext( contextId, { stencil: useStencil, depth: useDepth, premultipliedAlpha: true, alpha: false, antialias: false } );
 			if( !!context )
 			{
 				return ( context as WebGLRenderingContext );
@@ -102,6 +102,17 @@ export class HtmlHelper
 			return max;
 		};
 
+		const pixelToWorldSize = ( size: Point2D ): Point2D =>
+		{
+			const ratio = size.X / size.Y;
+			const safeRatio = safeZone.X / safeZone.Y;
+
+			const width = ( ratio > safeRatio ) ? safeZone.Y * ratio : safeZone.X;
+			const height = ( ratio > safeRatio ) ? safeZone.Y : safeZone.X / ratio;
+
+			return new Point2D( width, height );
+		};
+
 		// TODO: throttling & sync with WebGL somehow
 		const resize = () =>
 		{
@@ -112,21 +123,24 @@ export class HtmlHelper
 			const scale = Math.max( 1.0, newSize.X / maxSize.X, newSize.Y / maxSize.Y );
 			newSize.Scale( 1 / scale );
 
-			const size = engine.Renderer.Size;
-			if( size.X >= size.Y && newSize.X < newSize.Y )
+			// RenderSize
+			engine.Renderer.RenderSize.Set( newSize );
+			canvas.width = newSize.X;
+			canvas.height = newSize.Y;
+			canvasTransform.SetTransform( pixelSize.Scale( 0.5 / pixelRatio ), scale / pixelRatio );
+
+			// WorldSize
+			const oldWorldSize = engine.Renderer.WorldSize;
+			const newWorldSize = pixelToWorldSize( newSize );
+			if( oldWorldSize.X >= oldWorldSize.Y && newSize.X < newSize.Y )
 			{
 				engine.EventManager.Send( { EventId: "Screen:Portrait" } );
 			}
-			if( size.X < size.Y && newSize.X >= newSize.Y )
+			if( oldWorldSize.X < oldWorldSize.Y && newSize.X >= newSize.Y )
 			{
 				engine.EventManager.Send( { EventId: "Screen:Landscape" } );
 			}
-
-			size.Set( newSize );
-			canvas.width = newSize.X;
-			canvas.height = newSize.Y;
-
-			canvasTransform.SetTransform( pixelSize.Scale( 0.5 / pixelRatio ), scale / pixelRatio );
+			engine.Renderer.WorldSize.Set( newWorldSize );
 		};
 
 		window.onorientationchange = resize;

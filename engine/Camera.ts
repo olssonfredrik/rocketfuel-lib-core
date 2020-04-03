@@ -8,14 +8,11 @@ export class Camera
 	public readonly Projection: mat4 = mat4.create();
 	public readonly Size: Point2D = new Point2D( 0, 0 );
 
-	private safeZone: Point2D;
-
 	/**
 	 * Creates an instance of Camera.
 	 */
-	public constructor( safeZone: Point2D )
+	public constructor()
 	{
-		this.safeZone = safeZone;
 	}
 
 	/**
@@ -23,10 +20,10 @@ export class Camera
 	 */
 	public BeginFrame( renderer: WebGLRenderer ): void
 	{
-		const size = this.SetSize( renderer.Size );
+		this.SetSize( renderer.WorldSize );
 		const gl = renderer.GetContext();
 		gl.bindFramebuffer( WebGLRenderingContext.FRAMEBUFFER, null );
-		gl.viewport( 0, 0, size.X, size.Y );
+		gl.viewport( 0, 0, renderer.RenderSize.X, renderer.RenderSize.Y );
 	}
 
 	/**
@@ -40,26 +37,15 @@ export class Camera
 	/**
 	 *
 	 */
-	private SetSize( size: Point2D ): Point2D
+	private SetSize( size: Point2D ): void
 	{
 		if( !this.Size.Equals( size ) )
 		{
 			this.Size.Set( size );
-
-			const ratio = size.X / size.Y;
-			const safeRatio = this.safeZone.X / this.safeZone.Y;
-			let width = this.safeZone.X;
-			let height = this.safeZone.X / ratio;
-			if( ratio > safeRatio )
-			{
-				width = this.safeZone.Y * ratio;
-				height = this.safeZone.Y;
-			}
-			const halfWidth = width / 2;
-			const halfHeight = height / 2;
+			const halfWidth = size.X / 2;
+			const halfHeight = size.Y / 2;
 			mat4.ortho( this.Projection, -halfWidth, halfWidth, -halfHeight, halfHeight, -1, 1 );
 		}
-		return this.Size;
 	}
 
 }

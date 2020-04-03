@@ -9,7 +9,7 @@ import { SdfManager } from "../sdf";
 import { SoundManager } from "../sound";
 import { SpineManager } from "../spine";
 import { TextManager } from "../text";
-import { JSONUtil } from "../util";
+import { Asserts, JSONUtil } from "../util";
 import { Analytics } from "./Analytics";
 import { Camera } from "./Camera";
 import { EventManager } from "./EventManager";
@@ -44,16 +44,24 @@ export class Engine
 	/**
 	 * Creates an instance of Engine.
 	 */
-	public constructor( glContext: WebGLRenderingContext, safeZone: Point2D, inputElement: HTMLCanvasElement, fullscreenElement: HTMLElement, config: IInitConfig )
+	public constructor( parentElement: HTMLElement, config: IInitConfig )
 	{
-		this.Renderer = new WebGLRenderer( glContext );
+		const maxSize = Point2D.FromConfig( config.Render.MaxSize );
+		const canvas = HtmlHelper.CreateCanvas( maxSize );
+		parentElement.appendChild( canvas );
 
-		this.camera = new Camera( safeZone );
+		const glContext = HtmlHelper.CreateWebGLContext( canvas, config.Render.UseStencil, config.Render.UseDepth );
+		Asserts.AssertNotNull( glContext, "WebGL Not supported!" );
+
+		const safeZone = Point2D.FromConfig( config.Render.SafeZone );
+		this.Renderer = new WebGLRenderer( glContext, safeZone, config.Render.UseStencil, config.Render.UseDepth );
+
+		this.camera = new Camera();
 		Locale.Init( config.locale, config.currency );
 		this.EventManager = new EventManager();
 		this.Analytics = new Analytics( config.analytics_key );
 		this.NodeFactory = new NodeFactory();
-		this.InputManager = new InputManager( inputElement );
+		this.InputManager = new InputManager( canvas );
 		this.ShaderManager = new ShaderManager( this.Renderer );
 		this.TextureManager = new TextureManager( this.Renderer );
 		this.SdfManager = new SdfManager( this.TextureManager, this.ShaderManager );
@@ -61,7 +69,7 @@ export class Engine
 		this.DataManager = new DataManager();
 		this.TextManager = new TextManager();
 		this.SoundManager = new SoundManager();
-		this.FullscreenManager = new FullscreenManager( fullscreenElement );
+		this.FullscreenManager = new FullscreenManager( parentElement );
 		HtmlHelper.ListenerToEvent( this.EventManager );
 		this.EventManager.Subscribe( "Page:Reload", () => HtmlHelper.Reload() );
 		this.EventManager.Subscribe( "Page:OpenUrl", ( id, args ) => HtmlHelper.OpenUrl( args?.[ 0 ] as string ) );
@@ -83,6 +91,8 @@ export class Engine
 				resolve();
 			} );
 		} );
+
+		HtmlHelper.ResizeHandler( canvas, parentElement, this, safeZone, maxSize );
 	}
 
 	/**
@@ -145,5 +155,4 @@ export class Engine
 			HtmlHelper.RequestAnimationFrame( this.InternalFrame );
 		}
 	}
-
 }
