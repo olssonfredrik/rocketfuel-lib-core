@@ -61,12 +61,7 @@ export class TextureManager
 	 */
 	public SetActive( textures: Array< string > ): Array< Array< number > >
 	{
-		const positions = new Array( textures.length );
-		textures.forEach( ( id, index ) =>
-		{
-			positions[ index ] = this.BindTexture( id, index );
-		} );
-		return positions;
+		return textures.map( ( id, index ) => this.BindTexture( id, index ) );
 	}
 
 	/**
