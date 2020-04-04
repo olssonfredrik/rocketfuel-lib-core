@@ -13,11 +13,12 @@ export class RenderTarget implements ITexture
 
 	private readonly format: number;
 	private readonly attachment: number;
+	private readonly name: string;
 
 	/**
 	 * Creates an instance of RenderTarget.
 	 */
-	public constructor( renderer: WebGLRenderer, width: number, height: number, useAlpha: boolean = true )
+	public constructor( name: string, renderer: WebGLRenderer, size: Point2D, useAlpha: boolean = true )
 	{
 		const gl = renderer.GetContext();
 		const texture = gl.createTexture();
@@ -25,10 +26,11 @@ export class RenderTarget implements ITexture
 		const WebGL = WebGLRenderingContext;
 		this.format = ( useAlpha ? WebGL.RGBA : WebGL.RGB );
 		this.attachment = ( renderer.UseDepth ? WebGL.DEPTH_STENCIL_ATTACHMENT : WebGL.STENCIL_ATTACHMENT );
+		const renderbufferFormat = ( renderer.UseDepth ? WebGL.DEPTH_STENCIL : WebGL.STENCIL_INDEX8 );
 
 		gl.bindTexture( WebGL.TEXTURE_2D, texture );
 
-		gl.texImage2D( WebGL.TEXTURE_2D, 0, this.format, width, height, 0, this.format, WebGL.UNSIGNED_BYTE, null );
+		gl.texImage2D( WebGL.TEXTURE_2D, 0, this.format, size.X, size.Y, 0, this.format, WebGL.UNSIGNED_BYTE, null );
 
 		gl.texParameteri( WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.LINEAR );
 		gl.texParameteri( WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.LINEAR );
@@ -45,7 +47,7 @@ export class RenderTarget implements ITexture
 			const renderbuffer = gl.createRenderbuffer();
 			Asserts.AssertNotNull( renderbuffer, "Failed to create renderbuffer" );
 			gl.bindRenderbuffer( WebGL.RENDERBUFFER, renderbuffer );
-			gl.renderbufferStorage( WebGL.RENDERBUFFER, WebGL.STENCIL_INDEX8, width, height );
+			gl.renderbufferStorage( WebGL.RENDERBUFFER, renderbufferFormat, size.X, size.Y );
 			gl.framebufferRenderbuffer( WebGL.FRAMEBUFFER, this.attachment, gl.RENDERBUFFER, renderbuffer );
 			gl.bindRenderbuffer( WebGL.RENDERBUFFER, null );
 			this.WebGLRenderbuffer = renderbuffer;
@@ -55,28 +57,34 @@ export class RenderTarget implements ITexture
 
 		this.WebGLTexture = texture;
 		this.WebGLFramebuffer = framebuffer;
-		this.Size = new Point2D( width, height );
+		this.Size = size.Clone();
+		this.name = name;
 	}
 
 	/**
 	 *
 	 */
-	public Resize( renderer: WebGLRenderer, width: number, height: number ): void
+	public Resize( renderer: WebGLRenderer, size: Point2D ): void
 	{
+		if( size.Equals( this.Size ) )
+		{
+			return;
+		}
+
 		const WebGL = WebGLRenderingContext;
 		const gl = renderer.GetContext();
 		const texture = this.WebGLTexture;
 
 		gl.bindTexture( WebGL.TEXTURE_2D, texture );
-		gl.texImage2D( WebGL.TEXTURE_2D, 0, this.format, width, height, 0, this.format, WebGL.UNSIGNED_BYTE, null );
+		gl.texImage2D( WebGL.TEXTURE_2D, 0, this.format, size.X, size.Y, 0, this.format, WebGL.UNSIGNED_BYTE, null );
 
 		if( !!this.WebGLRenderbuffer )
 		{
 			gl.bindRenderbuffer( WebGL.RENDERBUFFER, this.WebGLRenderbuffer );
-			gl.renderbufferStorage( WebGL.RENDERBUFFER, this.attachment, width, height );
+			gl.renderbufferStorage( WebGL.RENDERBUFFER, this.attachment, size.X, size.Y );
 			gl.bindRenderbuffer( WebGL.RENDERBUFFER, null );
 		}
-		this.Size.SetValues( width, height );
+		this.Size.Set( size );
 	}
 
 	/**
