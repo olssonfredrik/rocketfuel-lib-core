@@ -1,8 +1,8 @@
 import { Point2D } from "../math";
 import { Asserts } from "../util";
 import { BlendMode } from "./BlendMode";
-import { StateStack } from "./stack/StateStack";
-import { StencilStack } from "./stack/StencilStack";
+import { StateStack, StencilStack } from "./stack";
+import { IRenderTarget } from "./texture";
 
 export class WebGLRenderer
 {
@@ -19,6 +19,7 @@ export class WebGLRenderer
 	public readonly CullingStack: StateStack< boolean >;
 	public readonly DepthCheckStack: StateStack< boolean >;
 	public readonly DepthMaskStack: StateStack< boolean >;
+	public readonly RenderTargetStack: StateStack< IRenderTarget >;
 	public readonly StencilStack: StencilStack;
 
 	private gl: WebGLRenderingContext;
@@ -30,24 +31,32 @@ export class WebGLRenderer
 	 */
 	public constructor( glContext: WebGLRenderingContext, startSize: Point2D, useStencil: boolean = true, useDepth: boolean = false )
 	{
+		const WebGL = WebGLRenderingContext;
 		const gl = glContext;
 		gl.getExtension( "OES_standard_derivatives" );
 
-		this.AlphaMaskStack = new StateStack< boolean >( false, ( state: boolean ): void =>
+		this.gl = gl;
+		this.vertexAttribCount = 0;
+		this.RenderSize = startSize.Clone();
+		this.WorldSize = startSize.Clone();
+		this.UseDepth = useDepth;
+		this.UseStencil = useStencil;
+
+		this.AlphaMaskStack = new StateStack< boolean >( false, ( state: boolean ) =>
 		{
 			gl.colorMask( true, true, true, state );
 		} );
 
-		this.BlendModeStack = new StateStack< BlendMode >( BlendMode.Normal, ( state: BlendMode ): void =>
+		this.BlendModeStack = new StateStack< BlendMode >( BlendMode.Normal, ( state: BlendMode ) =>
 		{
 			switch( state )
 			{
 				case BlendMode.Normal:
-					gl.blendFunc( WebGLRenderingContext.ONE, WebGLRenderingContext.ONE_MINUS_SRC_ALPHA );
+					gl.blendFunc( WebGL.ONE, WebGL.ONE_MINUS_SRC_ALPHA );
 					break;
 
 				case BlendMode.Additive:
-					gl.blendFunc( WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE );
+					gl.blendFunc( WebGL.SRC_ALPHA, WebGL.ONE );
 					break;
 
 				default:
@@ -55,28 +64,29 @@ export class WebGLRenderer
 			}
 		} );
 
-		this.CullingStack = new StateStack< boolean >( false, ( state: boolean ): void =>
+		this.CullingStack = new StateStack< boolean >( false, ( state: boolean ) =>
 		{
-			state ? gl.enable( WebGLRenderingContext.CULL_FACE ) : gl.disable( WebGLRenderingContext.CULL_FACE );
+			state ? gl.enable( WebGL.CULL_FACE ) : gl.disable( WebGL.CULL_FACE );
 		} );
 
-		this.DepthCheckStack = new StateStack< boolean >( false, ( state: boolean ): void =>
+		this.DepthCheckStack = new StateStack< boolean >( false, ( state: boolean ) =>
 		{
-			state ? gl.enable( WebGLRenderingContext.DEPTH_TEST ) : gl.disable( WebGLRenderingContext.DEPTH_TEST );
+			state ? gl.enable( WebGL.DEPTH_TEST ) : gl.disable( WebGL.DEPTH_TEST );
 		} );
 
-		this.DepthMaskStack = new StateStack< boolean >( false, ( state: boolean ): void =>
+		this.DepthMaskStack = new StateStack< boolean >( false, ( state: boolean ) =>
 		{
 			gl.depthMask( state );
 		} );
 
+		const screen = { Size: this.RenderSize, WebGLFramebuffer: null, Resize: () => {} };
+		this.RenderTargetStack = new StateStack< IRenderTarget >( screen, ( state: IRenderTarget ) =>
+		{
+			gl.bindFramebuffer( WebGL.FRAMEBUFFER, state.WebGLFramebuffer );
+			gl.viewport( 0, 0, state.Size.X, state.Size.Y );
+		} );
+
 		this.StencilStack = new StencilStack();
-		this.vertexAttribCount = 0;
-		this.RenderSize = startSize.Clone();
-		this.WorldSize = startSize.Clone();
-		this.gl = gl;
-		this.UseDepth = useDepth;
-		this.UseStencil = useStencil;
 	}
 
 	/**
@@ -114,6 +124,7 @@ export class WebGLRenderer
 		this.CullingStack.Reset();
 		this.DepthCheckStack.Reset();
 		this.DepthMaskStack.Reset();
+		this.RenderTargetStack.Reset();
 		this.StencilStack.Reset( this );
 
 		this.Clear( 0.0, 0.0, 0.0, 0.0 ); // start with an all black screen

@@ -1,16 +1,16 @@
 import { Point2D } from "../../math";
 import { Asserts } from "../../util";
 import { WebGLRenderer } from "../WebGLRenderer";
+import { IRenderTarget } from "./IRenderTarget";
 import { ITexture } from "./ITexture";
 
-export class RenderTarget implements ITexture
+export class RenderTargetTexture implements ITexture, IRenderTarget
 {
 	public readonly WebGLTexture: WebGLTexture;
 	public readonly Size: Point2D;
+	public readonly WebGLFramebuffer: WebGLFramebuffer;
 
-	private readonly WebGLFramebuffer: WebGLFramebuffer;
 	private readonly WebGLRenderbuffer?: WebGLRenderbuffer;
-
 	private readonly format: number;
 	private readonly attachment: number;
 	private readonly name: string;
@@ -85,16 +85,5 @@ export class RenderTarget implements ITexture
 			gl.bindRenderbuffer( WebGL.RENDERBUFFER, null );
 		}
 		this.Size.Set( size );
-	}
-
-	/**
-	 *
-	 */
-	public SetActive( renderer: WebGLRenderer ): void
-	{
-		const WebGL = WebGLRenderingContext;
-		const gl = renderer.GetContext();
-		gl.bindFramebuffer( WebGL.FRAMEBUFFER, this.WebGLFramebuffer );
-		gl.viewport( 0, 0, this.Size.X, this.Size.Y );
 	}
 }

@@ -23,11 +23,7 @@ export class Camera
 	 */
 	public BeginFrame(): void
 	{
-		const renderer = this.renderer;
-		this.SetSize( renderer.WorldSize );
-		const gl = renderer.GetContext();
-		gl.bindFramebuffer( WebGLRenderingContext.FRAMEBUFFER, null );
-		gl.viewport( 0, 0, renderer.RenderSize.X, renderer.RenderSize.Y );
+		this.SetSize( this.renderer.WorldSize );
 	}
 
 	/**
