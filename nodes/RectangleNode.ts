@@ -30,7 +30,7 @@ export class RectangleNode extends LeafNode
 
 		const halfWidth = width / 2;
 		const halfHeight = height / 2;
-		const indexBuffer = new IndexBuffer( renderer, new Uint16Array( [ 0, 2, 1, 0, 3, 2 ] ) );
+		const indexBuffer = IndexBuffer.CreateQuads( renderer );
 		const verts: Array< number > =
 		[
 			-halfWidth, halfHeight,

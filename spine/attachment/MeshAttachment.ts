@@ -23,7 +23,7 @@ export class MeshAttachment extends spine.MeshAttachment
 	{
 		super( name );
 
-		const indexBuffer = new IndexBuffer( renderer, new Uint16Array( 0 ) );
+		const indexBuffer = new IndexBuffer( renderer );
 		const uvBuffer = new VertexBuffer( renderer, new Float32Array( 0 ), [ 2 ] );
 		const buffer = new Float32Array( 0 );
 		const xyBuffer = new VertexBuffer( renderer, buffer, [ 2 ], WebGLRenderingContext.DYNAMIC_DRAW );

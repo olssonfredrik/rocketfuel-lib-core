@@ -60,19 +60,10 @@ export class PixiParticleSystemNode extends LeafNode
 		const maxParticles = this.system.MaxParticles;
 		const floatsPerParticle = 4 * 8; // 4 * [x, y, u, v, r, g, b, a]
 		const verts: Array< number > = new Array< number >( maxParticles * floatsPerParticle );
-		const indexData: Array< number > = [ 0, 2, 1, 0, 3, 2 ];
-		const indices: Array< number > = new Array< number >( maxParticles * indexData.length );
-		for( let i = 0; i < maxParticles; i++ )
-		{
-			for( let j = 0; j < indexData.length; j++ )
-			{
-				indices[ i * indexData.length + j ] = i * 4 + indexData[ j ];
-			}
-		}
 
 		this.vertData = new Float32Array( verts );
 		this.vertBuffer = new VertexBuffer( engine.Renderer, this.vertData, [ 2, 2, 4 ], WebGLRenderingContext.DYNAMIC_DRAW );
-		const indexBuffer = new IndexBuffer( engine.Renderer, new Uint16Array( indices ) );
+		const indexBuffer = IndexBuffer.CreateQuads( engine.Renderer, maxParticles );
 		this.vbo = new VertexBufferObject( indexBuffer, this.vertBuffer );
 	}
 

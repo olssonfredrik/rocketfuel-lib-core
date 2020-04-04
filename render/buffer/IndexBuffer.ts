@@ -4,6 +4,16 @@ import { GLBuffer } from "./GLBuffer";
 export class IndexBuffer extends GLBuffer
 {
 	/**
+	 *
+	 */
+	public static CreateQuads( renderer: WebGLRenderer, count: number = 1 ): IndexBuffer
+	{
+		const buffer = new IndexBuffer( renderer );
+		buffer.GenerateQuads( count );
+		return buffer;
+	}
+
+	/**
 	 * Creates an instance of IndexBuffer.
 	 */
 	public constructor( renderer: WebGLRenderer, data: Uint16Array = new Uint16Array( 0 ), usage: number = WebGLRenderingContext.STATIC_DRAW )

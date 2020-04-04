@@ -21,8 +21,7 @@ export class RegionAttachment extends spine.RegionAttachment
 	{
 		super( name );
 
-		const indexData = new Uint16Array( [ 0, 2, 1, 0, 3, 2 ] );
-		const indexBuffer = new IndexBuffer( renderer, indexData );
+		const indexBuffer = IndexBuffer.CreateQuads( renderer );
 
 		const uvData = new Float32Array( [ 0, 1, 0, 0, 1, 0, 1, 1 ] );
 		const uvBuffer = new VertexBuffer( renderer, uvData, [ 2 ] );

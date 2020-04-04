@@ -46,9 +46,7 @@ export class StatelessParticleSystemNode extends LeafNode
 			halfWidth, halfHeight, 1.0, 1.0, 0.0, 0.0,
 			-halfWidth, halfHeight, 0.0, 1.0, 0.0, 0.0,
 		];
-		const indexData: Array< number > = [ 0, 2, 1, 0, 3, 2 ];
 		const verts: Array< number > = new Array< number >( this.data.MaxParticles * vertData.length );
-		const indices: Array< number > = new Array< number >( this.data.MaxParticles * indexData.length );
 		for( let i = 0; i < this.data.MaxParticles; i++ )
 		{
 			vertData[ 4 ] = vertData[ 10 ] = vertData[ 16 ] = vertData[ 22 ] = i / 16384.0;
@@ -57,13 +55,9 @@ export class StatelessParticleSystemNode extends LeafNode
 			{
 				verts[ i * vertData.length + j ] = vertData[ j ];
 			}
-			for( let j = 0; j < indexData.length; j++ )
-			{
-				indices[ i * indexData.length + j ] = i * 4 + indexData[ j ];
-			}
 		}
 
-		const indexBuffer = new IndexBuffer( engine.Renderer, new Uint16Array( indices ) );
+		const indexBuffer = IndexBuffer.CreateQuads( engine.Renderer, this.data.MaxParticles );
 		const vertexBuffer = new VertexBuffer( engine.Renderer, new Float32Array( verts ), [ 2, 2, 2 ] );
 
 		this.vbo = new VertexBufferObject( indexBuffer, vertexBuffer );

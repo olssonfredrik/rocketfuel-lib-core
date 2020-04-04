@@ -37,7 +37,7 @@ export class SpriteNode extends LeafNode
 		const size = textureManager.Size( texture );
 		const halfWidth = size.X / 2;
 		const halfHeight = size.Y / 2;
-		const indexBuffer = new IndexBuffer( renderer, new Uint16Array( [ 0, 2, 1, 0, 3, 2 ] ) );
+		const indexBuffer = IndexBuffer.CreateQuads( renderer );
 		const verts: Array< number > =
 		[
 			-halfWidth, halfHeight, 0, 0,

@@ -39,7 +39,7 @@ export class Mesh
 		this.charSpacing = layout.CharacterSpacing;
 		this.alignment = Point2D.FromConfig( layout.Alignment );
 
-		this.indexBuffer = new IndexBuffer( renderer, new Uint16Array( [] ) );
+		this.indexBuffer = new IndexBuffer( renderer );
 		this.vertexBuffer = new VertexBuffer( renderer, new Float32Array( [] ), [ 4 ] );
 		this.vbo = new VertexBufferObject( this.indexBuffer, this.vertexBuffer );
 	}
