@@ -8,18 +8,22 @@ export class Camera
 	public readonly Projection: mat4 = mat4.create();
 	public readonly Size: Point2D = new Point2D( 0, 0 );
 
+	private readonly renderer: WebGLRenderer;
+
 	/**
 	 * Creates an instance of Camera.
 	 */
-	public constructor()
+	public constructor( renderer: WebGLRenderer )
 	{
+		this.renderer = renderer;
 	}
 
 	/**
 	 *
 	 */
-	public BeginFrame( renderer: WebGLRenderer ): void
+	public BeginFrame(): void
 	{
+		const renderer = this.renderer;
 		this.SetSize( renderer.WorldSize );
 		const gl = renderer.GetContext();
 		gl.bindFramebuffer( WebGLRenderingContext.FRAMEBUFFER, null );

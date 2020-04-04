@@ -56,7 +56,7 @@ export class Engine
 		const safeZone = Point2D.FromConfig( config.Render.SafeZone );
 		this.Renderer = new WebGLRenderer( glContext, safeZone, config.Render.UseStencil, config.Render.UseDepth );
 
-		this.camera = new Camera();
+		this.camera = new Camera( this.Renderer );
 		Locale.Init( config.locale, config.currency );
 		this.EventManager = new EventManager();
 		this.Analytics = new Analytics( config.analytics_key );
@@ -123,7 +123,7 @@ export class Engine
 		this.node.Update( deltaTime, this.transform, this.color );
 
 		this.Renderer.BeginFrame();
-		this.camera.BeginFrame( this.Renderer );
+		this.camera.BeginFrame();
 		this.node.Render( this.Renderer, this.camera );
 		this.camera.EndFrame();
 		this.Renderer.EndFrame();
