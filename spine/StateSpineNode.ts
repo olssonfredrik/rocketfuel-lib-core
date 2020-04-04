@@ -16,7 +16,7 @@ export class StateSpineNode extends SpineNode
 		const nodeConfig = JSONUtil.AsType< IStateSpineNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
-		const node = new StateSpineNode( nodeConfig.Name, engine.Renderer, skeleton, engine.TextureManager, engine.ShaderManager, shader, nodeConfig.StartState );
+		const node = new StateSpineNode( nodeConfig.Name, skeleton, engine.ShaderManager, shader, nodeConfig.StartState );
 		Object.keys( nodeConfig.Overrides ?? {} ).forEach( ( key ) =>
 		{
 			const value = JSONUtil.GetAssertedJSONObject( nodeConfig.Overrides ?? {}, key );
@@ -34,10 +34,9 @@ export class StateSpineNode extends SpineNode
 	/**
 	 * Creates an instance of StateSpineNode.
 	 */
-	public constructor( name: string, renderer: WebGLRenderer, skeleton: spine.Skeleton, textureManager: TextureManager,
-						shaderManager: ShaderManager, shader: Shader, startState: string )
+	public constructor( name: string, skeleton: spine.Skeleton, shaderManager: ShaderManager, shader: Shader, startState: string )
 	{
-		super( name, renderer, skeleton, textureManager, shaderManager, shader );
+		super( name, skeleton, shaderManager, shader );
 		this.state = new SpineState( this, startState );
 	}
 
