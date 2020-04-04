@@ -23,7 +23,7 @@ export class AttachmentLoader implements spine.AttachmentLoader
 	 */
 	public newRegionAttachment( skin: spine.Skin, name: string, path: string ): spine.RegionAttachment
 	{
-		const isPlaceholder = ( name.indexOf( "Placeholders/" ) === 0 );
+		const isPlaceholder = ( path.indexOf( "Placeholders/" ) === 0 );
 		const attachment = isPlaceholder ? new NodeAttachment( name ) : new RegionAttachment( this.renderer, this.textureManager, name );
 		attachment.setRegion( this.newTextureRegion() );
 
