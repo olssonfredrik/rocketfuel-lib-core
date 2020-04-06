@@ -5,6 +5,7 @@ export interface IRenderTarget
 {
 	readonly WebGLFramebuffer: WebGLFramebuffer | null;
 	readonly Size: Point2D;
+	readonly TextureId: string;
 
 	/**
 	 *

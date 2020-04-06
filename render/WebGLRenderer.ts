@@ -79,7 +79,7 @@ export class WebGLRenderer
 			gl.depthMask( state );
 		} );
 
-		const screen = { Size: this.RenderSize, WebGLFramebuffer: null, Resize: () => {} };
+		const screen = { Size: this.RenderSize, WebGLFramebuffer: null, TextureId: "", Resize: () => {} };
 		this.RenderTargetStack = new StateStack< IRenderTarget >( screen, ( state: IRenderTarget ) =>
 		{
 			gl.bindFramebuffer( WebGL.FRAMEBUFFER, state.WebGLFramebuffer );

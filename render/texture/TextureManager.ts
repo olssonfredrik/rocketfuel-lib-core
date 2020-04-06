@@ -2,6 +2,8 @@ import { DownloadManager } from "../../download";
 import { Point2D } from "../../math";
 import { IJSONArray, MapUtil } from "../../util";
 import { WebGLRenderer } from "../WebGLRenderer";
+import { IRenderTarget } from "./IRenderTarget";
+import { RenderTargetTexture } from "./RenderTargetTexture";
 import { SubTexture } from "./SubTexture";
 import { Texture } from "./Texture";
 
@@ -38,6 +40,16 @@ export class TextureManager
 			}
 			this.subTextures.set( subData.Id, new SubTexture( MapUtil.AssertedGet( textures, subData.Path ), subData.Pos ) );
 		} );
+	}
+
+	/**
+	 *
+	 */
+	public CreateRenderTarget( name: string, size: Point2D, useAlpha: boolean ): IRenderTarget
+	{
+		const texture = new RenderTargetTexture( name, this.renderer, size, useAlpha );
+		this.subTextures.set( name, new SubTexture( texture, [ 0, 0, 1, 1 ] ) );
+		return texture;
 	}
 
 	/**
