@@ -135,7 +135,7 @@ export class Engine
 	/**
 	 *
 	 */
-	public SetChild( node: INode )
+	public SetRootNode( node: INode )
 	{
 		this.node.SetChild( node );
 	}
