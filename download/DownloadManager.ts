@@ -90,7 +90,10 @@ export class DownloadManager
 		const done = this.GetStateCount( DownloaderState.Done );
 		if( done === this.total )
 		{
-			this.ExpandMulti();
+			if( this.ExpandMulti() )
+			{
+				return false;
+			}
 			this.isDone = true;
 			this.doneDownloading();
 			return true;
@@ -238,9 +241,10 @@ export class DownloadManager
 	/**
 	 *
 	 */
-	private ExpandMulti(): void
+	private ExpandMulti(): boolean
 	{
-		this.multi.forEach( ( multiFile ) =>
+		const multiFile = this.multi.pop();
+		if( !!multiFile )
 		{
 			const json = this.GetJson( multiFile );
 			Object.keys( json ).forEach( ( file ) =>
@@ -251,8 +255,8 @@ export class DownloadManager
 				this.list.set( file, downloader );
 				this.total++;
 			} );
-		} );
-		this.multi = [];
+			return true;
+		}
+		return false;
 	}
-
 }
