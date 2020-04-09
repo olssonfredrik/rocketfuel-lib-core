@@ -152,7 +152,7 @@ export class DownloadManager
 	 */
 	public GetJson( id: string ): IJSONObject
 	{
-		return JSON.parse( ( this.Get( id ) as TextDownloader ).GetData() );
+		return JSON.parse( this.GetText( id ) );
 	}
 
 	/**
