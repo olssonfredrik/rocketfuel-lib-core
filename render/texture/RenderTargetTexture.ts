@@ -14,11 +14,12 @@ export class RenderTargetTexture implements ITexture, IRenderTarget
 	private readonly WebGLRenderbuffer?: WebGLRenderbuffer;
 	private readonly format: number;
 	private readonly renderbufferFormat: number;
+	private readonly renderer: WebGLRenderer;
 
 	/**
 	 * Creates an instance of RenderTarget.
 	 */
-	public constructor( name: string, renderer: WebGLRenderer, size: Point2D, useAlpha: boolean = true )
+	public constructor( name: string, renderer: WebGLRenderer, size: Point2D, useAlpha: boolean )
 	{
 		const gl = renderer.GetContext();
 		const texture = gl.createTexture();
@@ -55,6 +56,7 @@ export class RenderTargetTexture implements ITexture, IRenderTarget
 
 		gl.bindFramebuffer( WebGL.FRAMEBUFFER, null );
 
+		this.renderer = renderer;
 		this.WebGLTexture = texture;
 		this.WebGLFramebuffer = framebuffer;
 		this.Size = size.Clone();
@@ -64,7 +66,7 @@ export class RenderTargetTexture implements ITexture, IRenderTarget
 	/**
 	 *
 	 */
-	public Resize( renderer: WebGLRenderer, size: Point2D ): void
+	public Resize( size: Point2D ): void
 	{
 		if( size.Equals( this.Size ) )
 		{
@@ -72,7 +74,7 @@ export class RenderTargetTexture implements ITexture, IRenderTarget
 		}
 
 		const WebGL = WebGLRenderingContext;
-		const gl = renderer.GetContext();
+		const gl = this.renderer.GetContext();
 		const texture = this.WebGLTexture;
 
 		gl.bindTexture( WebGL.TEXTURE_2D, texture );

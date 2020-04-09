@@ -10,5 +10,5 @@ export interface IRenderTarget
 	/**
 	 *
 	 */
-	Resize( renderer: WebGLRenderer, size: Point2D ): void;
+	Resize( size: Point2D ): void;
 }

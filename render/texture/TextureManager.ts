@@ -1,6 +1,6 @@
 import { DownloadManager } from "../../download";
 import { Point2D } from "../../math";
-import { IJSONArray, MapUtil } from "../../util";
+import { Asserts, IJSONArray, MapUtil } from "../../util";
 import { WebGLRenderer } from "../WebGLRenderer";
 import { IRenderTarget } from "./IRenderTarget";
 import { RenderTargetTexture } from "./RenderTargetTexture";
@@ -45,8 +45,9 @@ export class TextureManager
 	/**
 	 *
 	 */
-	public CreateRenderTarget( name: string, size: Point2D, useAlpha: boolean ): IRenderTarget
+	public CreateRenderTarget( name: string, size: Point2D, useAlpha: boolean = false ): IRenderTarget
 	{
+		Asserts.Assert( !this.subTextures.has( name ), "A render target with the name \"" + name + "\" already exists!" );
 		const texture = new RenderTargetTexture( name, this.renderer, size, useAlpha );
 		this.subTextures.set( name, new SubTexture( texture, [ 0, 0, 1, 1 ] ) );
 		return texture;
