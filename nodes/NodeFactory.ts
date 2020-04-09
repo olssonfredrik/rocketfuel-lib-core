@@ -16,6 +16,7 @@ import { InputNode } from "./InputNode";
 import { InputSliderNode } from "./InputSliderNode";
 import { NinePatchNode } from "./NinePatchNode";
 import { NullNode } from "./NullNode";
+import { PostProcessingNode } from "./PostProcessingNode";
 import { RectangleNode } from "./RectangleNode";
 import { SingleChildNode } from "./SingleChildNode";
 import { SpriteNode } from "./SpriteNode";
@@ -45,22 +46,23 @@ export class NodeFactory
 		this.Set( "InputConsumerNode", InputConsumerNode.Create );
 		this.Set( "InputNode", InputNode.Create );
 		this.Set( "InputSliderNode", InputSliderNode.Create );
+		this.Set( "NinePatchNode", NinePatchNode.Create );
 		this.Set( "NullNode", NullNode.Create );
+		this.Set( "PixiParticleSystemNode", PixiParticleSystemNode.Create );
+		this.Set( "PostProcessingNode", PostProcessingNode.Create );
+		this.Set( "RectangleNode", RectangleNode.Create );
 		this.Set( "SingleChildNode", SingleChildNode.Create );
 		this.Set( "SpineNode", SpineNode.Create );
-		this.Set( "StatelessParticleSystemNode", StatelessParticleSystemNode.Create );
-		this.Set( "PixiParticleSystemNode", PixiParticleSystemNode.Create );
 		this.Set( "SpriteNode", SpriteNode.Create );
+		this.Set( "StatelessParticleSystemNode", StatelessParticleSystemNode.Create );
 		this.Set( "StateSpineNode", StateSpineNode.Create );
+		this.Set( "StencilNode", StencilNode.Create );
 		this.Set( "TextNode", TextNode.Create );
 		this.Set( "TexturedQuadNode", TexturedQuadNode.Create );
 		this.Set( "TransformNode", TransformNode.Create );
 		this.Set( "TransformValueNode", TransformValueNode.Create );
 		this.Set( "ValueBooleanNode", ValueBooleanNode.Create );
 		this.Set( "ValueIndexNode", ValueIndexNode.Create );
-		this.Set( "NinePatchNode", NinePatchNode.Create );
-		this.Set( "StencilNode", StencilNode.Create );
-		this.Set( "RectangleNode", RectangleNode.Create );
 	}
 
 	/**
