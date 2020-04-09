@@ -59,7 +59,7 @@ export class HtmlHelper
 
 		for( const contextId of contextIdList )
 		{
-			const context = canvas.getContext( contextId, { stencil: useStencil, depth: useDepth, premultipliedAlpha: true, alpha: false, antialias: false } );
+			const context = canvas.getContext( contextId, { stencil: useStencil, depth: useDepth, premultipliedAlpha: true, alpha: true, antialias: false } );
 			if( !!context )
 			{
 				return ( context as WebGLRenderingContext );
