@@ -27,4 +27,12 @@ export class Asserts
 	{
 		Asserts.Assert( mightBeUndefinedOrNull !== undefined && mightBeUndefinedOrNull !== null, message );
 	}
+
+	/**
+	 * Throw an error if the function is called.
+	 */
+	public static Fail(): never
+	{
+		throw new Error( "This function should not be called" );
+	}
 }
