@@ -127,7 +127,7 @@ export class WebGLRenderer
 		this.RenderTargetStack.Reset();
 		this.StencilStack.Reset( this );
 
-		this.Clear( 0.0, 0.0, 0.0, 0.0 ); // start with an all black screen
+		this.Clear( 0.0, 0.0, 0.0, 1.0 );
 	}
 
 	/**
