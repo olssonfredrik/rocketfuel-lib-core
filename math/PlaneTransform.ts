@@ -15,10 +15,7 @@ export class PlaneTransform
 		mat4.multiply( matrix, matrix, transform.Get() );
 		mat4.invert( matrix, matrix );
 
-		const normalizedX = ( 2.0 * screenPosition.X ) / camera.Size.X - 1.0;
-		const normalizedY = 1.0 - ( 2.0 * screenPosition.Y ) / camera.Size.Y;
-
-		const point = vec4.fromValues( normalizedX, normalizedY, 0, 1 );
+		const point = vec4.fromValues( screenPosition.X, screenPosition.Y, 0, 1 );
 		vec4.transformMat4( point, point, matrix );
 
 		return new Point2D( point[ 0 ], point[ 1 ] );

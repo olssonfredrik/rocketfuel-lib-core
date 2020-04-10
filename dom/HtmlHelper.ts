@@ -172,4 +172,14 @@ export class HtmlHelper
 	{
 		events.forEach( ( event ) => document.addEventListener( event, listener ) );
 	}
+
+	/**
+	 *
+	 */
+	public static NormalizeInput( position: Point2D, canvas: HTMLCanvasElement ): void
+	{
+		const normalizedX = ( 2.0 * position.X ) / canvas.width - 1.0;
+		const normalizedY = 1.0 - ( 2.0 * position.Y ) / canvas.height;
+		position.SetValues( normalizedX, normalizedY );
+	}
 }

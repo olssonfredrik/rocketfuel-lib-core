@@ -52,7 +52,7 @@ export class CameraAlignmentNode extends SingleChildNode
 	public Render( renderer: WebGLRenderer, camera: Camera ): void
 	{
 		// We update the transform here because we need the camera
-		const localPosition = PlaneTransform.ScreenToPlane( camera, this.parentTransform, new Point2D( camera.Size.X * this.alignment.X, camera.Size.Y * this.alignment.Y ) );
+		const localPosition = PlaneTransform.ScreenToPlane( camera, this.parentTransform, new Point2D( this.alignment.X * 2 - 1, 1 - 2 * this.alignment.Y ) );
 
 		mat4.fromTranslation( this.transform.GetLocal(), [ localPosition.X * this.axis.X, localPosition.Y * this.axis.Y, 0 ] );
 		this.transform.SetDirty();

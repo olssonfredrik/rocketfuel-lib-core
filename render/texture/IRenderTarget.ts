@@ -1,5 +1,4 @@
 import { Point2D } from "../../math";
-import { WebGLRenderer } from "../WebGLRenderer";
 
 export interface IRenderTarget
 {

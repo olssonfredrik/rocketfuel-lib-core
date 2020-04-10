@@ -1,23 +1,24 @@
 import { Point2D } from "../../math";
 import { InputEvent } from "./InputEvent";
 import { PointerState } from "./PointerState";
+import { HtmlHelper } from "../../dom";
 
 export class TouchListener
 {
 	private current: InputEvent;
-	private element: HTMLCanvasElement;
+	private canvas: HTMLCanvasElement;
 
 	/**
 	 * Creates an instance of TouchListener.
 	 */
-	public constructor( element: HTMLCanvasElement )
+	public constructor( canvas: HTMLCanvasElement )
 	{
-		element.addEventListener( "touchstart", this.TouchEvent.bind( this ) );
-		element.addEventListener( "touchend", this.TouchEvent.bind( this ) );
-		element.addEventListener( "touchmove", this.TouchEvent.bind( this ) );
-		element.addEventListener( "touchcancel", this.Cancel.bind( this ) );
+		canvas.addEventListener( "touchstart", this.TouchEvent.bind( this ) );
+		canvas.addEventListener( "touchend", this.TouchEvent.bind( this ) );
+		canvas.addEventListener( "touchmove", this.TouchEvent.bind( this ) );
+		canvas.addEventListener( "touchcancel", this.Cancel.bind( this ) );
 
-		this.element = element;
+		this.canvas = canvas;
 		this.current = new InputEvent( new Point2D( -1000, -1000 ), false );
 	}
 
@@ -29,7 +30,7 @@ export class TouchListener
 		const current = this.current;
 
 		state.IsTouch = false;
-		state.Active = ( current.Position.X >= 0 ) && ( current.Pressed || current.Last );
+		state.Active = ( current.Position.X >= -1 ) && ( current.Pressed || current.Last );
 		state.Position.Set( current.Position );
 		state.Pressed = current.Pressed;
 		state.Last = current.Last;
@@ -56,6 +57,7 @@ export class TouchListener
 		{
 			this.current.Pressed = true;
 			this.ConvertPosition( event.changedTouches[ 0 ].clientX, event.changedTouches[ 0 ].clientY, this.current.Position );
+			HtmlHelper.NormalizeInput( this.current.Position, this.canvas );
 		}
 		this.current.Pressed = ( event.type !== "touchend" );
 	}
@@ -65,10 +67,10 @@ export class TouchListener
 	 */
 	private ConvertPosition( x: number, y: number, result: Point2D )
 	{
-		const rect = this.element.getBoundingClientRect();
+		const rect = this.canvas.getBoundingClientRect();
 		const resolutionMultiplier = 1.0 / 1.0; // device pixel ratio;
-		const targetX = ( ( x - rect.left ) * ( this.element.width / rect.width ) ) * resolutionMultiplier;
-		const targetY = ( ( y - rect.top ) * ( this.element.height / rect.height ) ) * resolutionMultiplier;
+		const targetX = ( ( x - rect.left ) * ( this.canvas.width / rect.width ) ) * resolutionMultiplier;
+		const targetY = ( ( y - rect.top ) * ( this.canvas.height / rect.height ) ) * resolutionMultiplier;
 		result.SetValues( targetX, targetY );
 	}
 }
