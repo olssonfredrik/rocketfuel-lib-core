@@ -16,7 +16,10 @@ export class SingleChildNode extends Node
 	{
 		const nodeConfig = JSONUtil.AsType< ISingleChildNodeConfig >( config );
 		const node = new SingleChildNode( nodeConfig.Name );
-		node.SetChild( engine.NodeFactory.Create( engine, nodeConfig.Child ) );
+		if( !!nodeConfig.Child )
+		{
+			node.SetChild( engine.NodeFactory.Create( engine, nodeConfig.Child ) );
+		}
 		return node;
 	}
 
@@ -64,5 +67,5 @@ export class SingleChildNode extends Node
 interface ISingleChildNodeConfig
 {
 	Name: string;
-	Child: IJSONObject;
+	Child?: IJSONObject;
 }

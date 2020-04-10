@@ -12,6 +12,10 @@ export class PostProcessingNode extends SingleChildNode
 	{
 		const nodeConfig = JSONUtil.AsType< IPostProcessingNodeConfig >( config );
 		const node = new PostProcessingNode( nodeConfig.Name, engine.Renderer, engine.TextureManager, engine.ShaderManager, nodeConfig.Shader );
+		if( !!nodeConfig.Child )
+		{
+			node.SetChild( engine.NodeFactory.Create( engine, nodeConfig.Child ) );
+		}
 		return node;
 	}
 
@@ -68,5 +72,6 @@ export class PostProcessingNode extends SingleChildNode
 interface IPostProcessingNodeConfig
 {
 	Name: string;
+	Child?: IJSONObject;
 	Shader?: string;
 }
