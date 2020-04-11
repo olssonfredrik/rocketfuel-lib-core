@@ -1,18 +1,21 @@
 import { spine } from "esotericsoftware-spine";
+import { EventManager } from "../engine";
 import { IPlayer } from "../player";
 
 export class SpinePlayer implements IPlayer
 {
 	private animationState: spine.AnimationState;
 	private animationData: spine.SkeletonData;
+	private eventManager: EventManager;
 
 	/**
 	 *
 	 */
-	public constructor( state: spine.AnimationState, data: spine.SkeletonData )
+	public constructor( state: spine.AnimationState, data: spine.SkeletonData, eventManager: EventManager )
 	{
 		this.animationState = state;
 		this.animationData = data;
+		this.eventManager = eventManager;
 	}
 
 	/**
@@ -29,7 +32,18 @@ export class SpinePlayer implements IPlayer
 				end: ( entry ) => {},
 				dispose: ( entry ) => {},
 				complete: ( entry ) => resolve(),
-				event: ( entry, event ) => {},
+				event: ( entry, event ) => {
+					const name = event.data.name;
+					if( name === "Resolve" )
+					{
+						resolve();
+					}
+					else
+					{
+						const params = event.stringValue.length > 0 ? JSON.parse( event.stringValue ) : undefined;
+						this.eventManager.Send( { EventId: name, Params: params } );
+					}
+				},
 				interrupt: ( entry ) => {},
 				start: ( entry ) => {},
 			};

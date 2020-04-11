@@ -1,6 +1,6 @@
 import { spine } from "esotericsoftware-spine";
 import { mat4 } from "gl-matrix";
-import { Camera, Engine } from "../engine";
+import { Camera, Engine, EventManager } from "../engine";
 import { Transform } from "../math";
 import { CompositeNode, INode } from "../nodes";
 import { IPlayer } from "../player";
@@ -21,7 +21,7 @@ export class SpineNode extends CompositeNode
 		const nodeConfig = JSONUtil.AsType< ISpineNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
-		const node = new SpineNode( nodeConfig.Name, skeleton, engine.ShaderManager, shader );
+		const node = new SpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader );
 		Object.keys( nodeConfig.Overrides ?? {} ).forEach( ( key ) =>
 		{
 			const value = JSONUtil.GetAssertedJSONObject( nodeConfig.Overrides ?? {}, key );
@@ -46,7 +46,7 @@ export class SpineNode extends CompositeNode
 	/**
 	 * Creates an instance of SpineNode.
 	 */
-	public constructor( name: string, skeleton: spine.Skeleton, shaderManager: ShaderManager, shader: Shader )
+	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader )
 	{
 		super( name );
 
@@ -54,7 +54,7 @@ export class SpineNode extends CompositeNode
 		const animationStateData = new spine.AnimationStateData( skeleton.data );
 		const animationState = new spine.AnimationState( animationStateData );
 
-		this.player = new SpinePlayer( animationState, skeleton.data );
+		this.player = new SpinePlayer( animationState, skeleton.data, eventManager );
 		this.clipShader = shaderManager.Get( "RFLib/SolidColor" );
 		this.skeleton = skeleton;
 		this.animationState = animationState;
