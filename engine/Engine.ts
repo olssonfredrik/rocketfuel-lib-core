@@ -98,11 +98,9 @@ export class Engine
 	/**
 	 *
 	 */
-	public Start(): Promise< void >
+	public Init(): Promise< void >
 	{
 		HtmlHelper.RequestAnimationFrame( this.InternalFrame );
-		this.isRunning = true;
-		this.lastTime = performance.now();
 
 		return this.inited;
 	}
@@ -110,9 +108,17 @@ export class Engine
 	/**
 	 *
 	 */
-	public Stop(): void
+	public Start( rootNode: INode ): void
 	{
-		this.isRunning = false;
+		this.node.SetChild( rootNode );
+
+		this.isRunning = true;
+		this.lastTime = performance.now();
+
+		// flush all events gathered during Construction/Init
+		this.EventManager.Send( { EventId: "Engine:StartEvents" } );
+		this.EventManager.Flush();
+		this.EventManager.Flush();
 	}
 
 	/**
@@ -135,24 +141,20 @@ export class Engine
 	/**
 	 *
 	 */
-	public SetRootNode( node: INode )
-	{
-		this.node.SetChild( node );
-	}
-
-	/**
-	 *
-	 */
 	private InternalFrame = (): void =>
 	{
-		const time = performance.now();
-		this.Frame( ( time - this.lastTime ) * 0.001 );
-		this.lastTime = time;
-
-		this.DownloadManager.Update();
 		if( this.isRunning )
 		{
-			HtmlHelper.RequestAnimationFrame( this.InternalFrame );
+			const time = performance.now();
+			this.Frame( ( time - this.lastTime ) * 0.001 );
+			this.lastTime = time;
 		}
+		else
+		{
+			this.DownloadManager.Update();
+			this.EventManager.Flush();
+		}
+
+		HtmlHelper.RequestAnimationFrame( this.InternalFrame );
 	}
 }

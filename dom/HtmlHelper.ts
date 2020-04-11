@@ -89,6 +89,8 @@ export class HtmlHelper
 	public static ResizeHandler( canvas: HTMLCanvasElement, parent: HTMLElement, engine: Engine, safeZone: Point2D, maxSize: Point2D ): void
 	{
 		const canvasTransform = new CanvasTransform( canvas );
+		const safeRatio = safeZone.X / safeZone.Y;
+		let forceEvents = true;
 
 		const safeZoneSize = ( size: Point2D ): Point2D =>
 		{
@@ -105,7 +107,6 @@ export class HtmlHelper
 		const pixelToWorldSize = ( size: Point2D ): Point2D =>
 		{
 			const ratio = size.X / size.Y;
-			const safeRatio = safeZone.X / safeZone.Y;
 
 			const width = ( ratio > safeRatio ) ? safeZone.Y * ratio : safeZone.X;
 			const height = ( ratio > safeRatio ) ? safeZone.Y : safeZone.X / ratio;
@@ -130,18 +131,39 @@ export class HtmlHelper
 			canvasTransform.SetTransform( pixelSize.Scale( 0.5 / pixelRatio ), scale / pixelRatio );
 
 			// WorldSize
-			const oldWorldSize = engine.Renderer.WorldSize;
+			const oldWorldSize = engine.Renderer.WorldSize.Clone();
 			const newWorldSize = pixelToWorldSize( newSize );
-			if( oldWorldSize.X >= oldWorldSize.Y && newSize.X < newSize.Y )
+			engine.Renderer.WorldSize.Set( newWorldSize );
+
+			// Orientation
+			if( newWorldSize.X < newWorldSize.Y && ( oldWorldSize.X >= oldWorldSize.Y || forceEvents ) )
 			{
 				engine.EventManager.Send( { EventId: "Screen:Portrait" } );
 			}
-			if( oldWorldSize.X < oldWorldSize.Y && newSize.X >= newSize.Y )
+			if( newWorldSize.X >= newWorldSize.Y && ( oldWorldSize.X < oldWorldSize.Y || forceEvents ) )
 			{
 				engine.EventManager.Send( { EventId: "Screen:Landscape" } );
 			}
-			engine.Renderer.WorldSize.Set( newWorldSize );
+
+			// Overflow (ie. on what axis are we outside the saze zone)
+			const oldRatio = oldWorldSize.X / oldWorldSize.Y;
+			const newRatio = newWorldSize.X / newWorldSize.Y;
+			if( newRatio < safeRatio && ( oldRatio >= safeRatio || forceEvents ) )
+			{
+				engine.EventManager.Send( { EventId: "Screen:OverflowVertically" } );
+			}
+			if( newRatio > safeRatio && ( oldRatio <= safeRatio || forceEvents ) )
+			{
+				engine.EventManager.Send( { EventId: "Screen:OverflowHorizontally" } );
+			}
+			forceEvents = false;
 		};
+
+		engine.EventManager.Subscribe( "Engine:StartEvents", () =>
+		{
+			forceEvents = true;
+			resize();
+		} );
 
 		window.onorientationchange = resize;
 		window.onresize = resize;
