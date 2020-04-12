@@ -22,7 +22,7 @@ export class CameraAlignmentNode extends SingleChildNode
 	private readonly alignment: Point2D;
 	private readonly axis: Point2D;
 	private readonly transform: Transform;
-	private parentTransform: Transform;
+	private camera?: Camera;
 
 	/**
 	 *
@@ -30,10 +30,9 @@ export class CameraAlignmentNode extends SingleChildNode
 	public constructor( name: string, alignment: Point2D, axis: Point2D )
 	{
 		super( name );
-		this.alignment = new Point2D( alignment.X, alignment.Y );
-		this.axis = new Point2D( axis.X, axis.Y );
+		this.alignment = alignment.Clone();
+		this.axis = axis.Clone();
 		this.transform = new Transform();
-		this.parentTransform = new Transform();
 	}
 
 	/**
@@ -41,8 +40,13 @@ export class CameraAlignmentNode extends SingleChildNode
 	 */
 	public Update( deltaTime: number, transform: Transform, color: Transform ): void
 	{
-		this.parentTransform = transform;
 		this.transform.SetParent( transform );
+		if( !!this.camera )
+		{
+			const localPosition = PlaneTransform.ScreenToPlane( this.camera, transform, new Point2D( this.alignment.X * 2 - 1, 1 - 2 * this.alignment.Y ) );
+			mat4.fromTranslation( this.transform.GetLocal(), [ localPosition.X * this.axis.X, localPosition.Y * this.axis.Y, 0 ] );
+			this.transform.SetDirty();
+		}
 		super.Update( deltaTime, this.transform, color );
 	}
 
@@ -51,12 +55,7 @@ export class CameraAlignmentNode extends SingleChildNode
 	 */
 	public Render( renderer: WebGLRenderer, camera: Camera ): void
 	{
-		// We update the transform here because we need the camera
-		const localPosition = PlaneTransform.ScreenToPlane( camera, this.parentTransform, new Point2D( this.alignment.X * 2 - 1, 1 - 2 * this.alignment.Y ) );
-
-		mat4.fromTranslation( this.transform.GetLocal(), [ localPosition.X * this.axis.X, localPosition.Y * this.axis.Y, 0 ] );
-		this.transform.SetDirty();
-
+		this.camera = camera;
 		super.Render( renderer, camera );
 	}
 }
