@@ -90,11 +90,7 @@ export class SoundGroup
 		const promise = DeferredPromise.Create< void >();
 		const sound = MapUtil.AssertedGet( this.sounds, id, "Sound not found!" );
 		const instanceId = sound.play();
-		sound.once( "end", ( soundId ) =>
-		{
-			Asserts.Assert( instanceId === soundId, "Sound id mismatch" );
-			promise.Resolve();
-		} );
+		sound.once( "end", ( soundId ) => promise.Resolve(), instanceId );
 		return promise.Promise;
 	}
 
