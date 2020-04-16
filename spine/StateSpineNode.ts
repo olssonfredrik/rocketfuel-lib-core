@@ -43,7 +43,7 @@ export class StateSpineNode extends SpineNode
 	/**
 	 *
 	 */
-	public SetState( state: string, force: boolean = false ): Promise< void >
+	public SetState( state: string, force: boolean = false ): Promise< boolean >
 	{
 		return this.state.SetState( state, force );
 	}

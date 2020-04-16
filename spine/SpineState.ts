@@ -29,26 +29,22 @@ export class SpineState
 	/**
 	 *
 	 */
-	public SetState( state: string, force: boolean = false ): Promise< void >
+	public SetState( state: string, force: boolean = false ): Promise< boolean >
 	{
-		let promise = Promise.resolve();
 		if( force || this.state !== state )
 		{
 			const transition = this.state + "_" + state;
 			this.state = state;
-			if( this.spine.HasAnimation( transition ) )
+			if( !force && this.spine.HasAnimation( transition ) )
 			{
-				promise = this.spine.Play( transition ).then( () =>
-				{
-					this.spine.Play( state, true );
-				} );
+				return this.spine.Play( transition ).then( ( stopped ) => stopped || this.spine.Play( state, true ) );
 			}
 			else
 			{
-				this.spine.Play( state, true );
+				return this.spine.Play( state, true );
 			}
 		}
-		return promise;
+		return Promise.resolve( false );
 	}
 
 	/**

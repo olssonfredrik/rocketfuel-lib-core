@@ -1,12 +1,14 @@
 import { spine } from "esotericsoftware-spine";
 import { EventManager } from "../engine";
 import { IPlayer } from "../player";
+import { Asserts } from "../util";
 
 export class SpinePlayer implements IPlayer
 {
 	private animationState: spine.AnimationState;
 	private animationData: spine.SkeletonData;
 	private eventManager: EventManager;
+	private stopFlag: boolean;
 
 	/**
 	 *
@@ -16,27 +18,30 @@ export class SpinePlayer implements IPlayer
 		this.animationState = state;
 		this.animationData = data;
 		this.eventManager = eventManager;
+		this.stopFlag = false;
 	}
 
 	/**
 	 *
 	 */
-	public Play( animation: string, loop: boolean = false ): Promise< void >
+	public Play( animation: string, loop: boolean = false ): Promise< boolean >
 	{
+		Asserts.Assert( !this.stopFlag, "Don't trigger a Play on a stopped Promise." );
+		this.Stop();
 		const track = this.animationState.setAnimation( 0, animation, loop );
 
-		return new Promise< void >( ( resolve ) =>
+		return new Promise< boolean >( ( resolve ) =>
 		{
 			track.listener =
 			{
 				end: ( entry ) => {},
 				dispose: ( entry ) => {},
-				complete: ( entry ) => resolve(),
+				complete: ( entry ) => resolve( this.stopFlag ),
 				event: ( entry, event ) => {
 					const name = event.data.name;
 					if( name === "Resolve" )
 					{
-						resolve();
+						resolve( this.stopFlag );
 					}
 					else
 					{
@@ -58,8 +63,11 @@ export class SpinePlayer implements IPlayer
 		const track = this.animationState.tracks[ 0 ];
 		if( !!track )
 		{
+			this.stopFlag = true;
 			track.loop = false;
 			this.animationState.update( track.trackEnd - track.trackTime );
+			track.listener.complete( track );
+			this.stopFlag = false;
 		}
 	}
 

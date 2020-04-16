@@ -3,7 +3,7 @@ export interface IPlayer
 	/**
 	 *
 	 */
-	Play( animation: string, loop: boolean ): Promise< void >;
+	Play( animation: string, loop: boolean ): Promise< boolean >;
 
 	/**
 	 *

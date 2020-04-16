@@ -73,7 +73,7 @@ export class SpineNode extends CompositeNode
 	/**
 	 *
 	 */
-	public Play( animation: string, loop: boolean = false ): Promise< void >
+	public Play( animation: string, loop: boolean = false ): Promise< boolean >
 	{
 		return this.player.Play( animation, loop );
 	}
