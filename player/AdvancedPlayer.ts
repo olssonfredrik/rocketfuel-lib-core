@@ -28,6 +28,7 @@ export class AdvancedPlayer implements IPlayer
 			{
 				return this.player.Play( randomAnimation, false ).then( ( stopped ) => stopped || this.Play( animation, true ) );
 			}
+			return this.player.Play( randomAnimation, loop );
 		}
 		return this.player.Play( animation, loop );
 	}

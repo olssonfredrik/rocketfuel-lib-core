@@ -28,7 +28,9 @@ export class SpinePlayer implements IPlayer
 	{
 		Asserts.Assert( !this.stopFlag, "Don't trigger a Play on a stopped Promise." );
 		this.Stop();
+
 		const track = this.animationState.setAnimation( 0, animation, loop );
+		track.loop = track.loop && ( track.animation.duration > 0 );
 
 		return new Promise< boolean >( ( resolve ) =>
 		{
@@ -65,7 +67,7 @@ export class SpinePlayer implements IPlayer
 		{
 			this.stopFlag = true;
 			track.loop = false;
-			this.animationState.update( track.trackEnd - track.trackTime );
+			this.animationState.update( track.animationEnd - track.getAnimationTime() );
 			track.listener.complete( track );
 			this.stopFlag = false;
 		}

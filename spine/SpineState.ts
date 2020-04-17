@@ -37,7 +37,14 @@ export class SpineState
 			this.state = state;
 			if( !force && this.spine.HasAnimation( transition ) )
 			{
-				return this.spine.Play( transition ).then( ( stopped ) => stopped || this.spine.Play( state, true ) );
+				return this.spine.Play( transition ).then( ( stopped ) =>
+				{
+					if( !stopped )
+					{
+						this.spine.Play( state, true );
+					}
+					return stopped;
+				} );
 			}
 			else
 			{
