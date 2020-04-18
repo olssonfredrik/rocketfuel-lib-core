@@ -136,6 +136,7 @@ export class Engine
 
 		this.InputManager.Process( this.camera );
 		this.EventManager.Flush();
+		this.DataManager.Update( deltaTime );
 	}
 
 	/**

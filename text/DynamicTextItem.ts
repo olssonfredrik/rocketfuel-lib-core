@@ -22,11 +22,14 @@ export class DynamicTextItem implements ITextItem
 		{
 			if( pair.indexOf( "{" ) >= 0 )
 			{
-				const parts = new RegExp( "([^{]*){([^,]+),(.+)" ).exec( pair );
-				Asserts.AssertNotNull( parts, "Illformatted TextItem: " + text );
-				Asserts.Assert( parts.length === 4, "Illformatted TextItem: " + text );
-				Asserts.Assert( parts[ 2 ] === "Value" || parts[ 2 ] === "Money", "Data type must be \"Money\" or \"Value\"." );
-				this.data.push( new TextValuePair( parts[ 1 ], dataManager.GetRead( parts[ 2 ], parts[ 3 ] ) ) );
+				const parts = pair.split( "{" );
+				Asserts.Assert( parts.length === 2, "Illformatted TextItem: " + text );
+
+				const valueParameters = parts[1].split( "," ).map( ( value ) => value.trim() );
+				Asserts.Assert( valueParameters.length === 2 || valueParameters.length === 3, "Illformatted TextItem: " + text );
+				Asserts.Assert( valueParameters[ 0 ] === "Value" || valueParameters[ 0 ] === "Money", "Data type must be \"Money\" or \"Value\"." );
+
+				this.data.push( new TextValuePair( parts[ 0 ], dataManager.GetRead( valueParameters[ 0 ], valueParameters[ 1 ], valueParameters[ 2 ] ) ) );
 			}
 			else
 			{

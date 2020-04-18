@@ -1,42 +1,26 @@
-import { Locale } from "../engine/Locale";
 import { Asserts } from "../util";
+import { DataFormatter } from "./DataFormatter";
+import { DataValueFormat } from "./DataValueFormat";
 import { DataCallback, IDataRead } from "./IDataRead";
 import { IDataWrite } from "./IDataWrite";
 
 export class DataValue implements IDataRead< number >, IDataWrite< number >
 {
-	public readonly IsMoney: boolean;
 	private value: number;
 
 	private readonly callbacks: Array< DataCallback< number > >;
-	private readonly formatOptions?: Intl.NumberFormatOptions;
 	private readonly divisor: number;
-	private readonly format: DataValueFormat;
+	private readonly formatter: DataFormatter;
 
 	/**
 	 *
 	 */
 	public constructor( value: number, format: DataValueFormat, max: number = -1 )
 	{
-		this.format = format;
 		this.value = value;
 		this.divisor = max + 1;
-		this.IsMoney = ( format === DataValueFormat.Money );
+		this.formatter = new DataFormatter( format );
 		this.callbacks = new Array< DataCallback< number > >();
-
-		if( !this.IsMoney )
-		{
-			const fractions = ( format === DataValueFormat.Decimal ) ? 2 : 0;
-			const style = ( format === DataValueFormat.Percent ) ? "percent" : "decimal";
-			const digits = ( format === DataValueFormat.DoubleDigit ) ? 2 : undefined;
-			this.formatOptions =
-			{
-				minimumFractionDigits: fractions,
-				maximumFractionDigits: fractions,
-				style: style,
-				minimumIntegerDigits: digits,
-			};
-		}
 	}
 
 	/**
@@ -52,15 +36,15 @@ export class DataValue implements IDataRead< number >, IDataWrite< number >
 	 */
 	public GetText(): string
 	{
-		if( this.IsMoney )
-		{
-			return Locale.FormatCurrency( this.value );
-		}
-		if( this.format === DataValueFormat.Unformatted )
-		{
-			return "" + this.value;
-		}
-		return Locale.FormatNumber( this.value, this.formatOptions );
+		return this.formatter.FormatValue( this.value );
+	}
+
+	/**
+	 *
+	 */
+	public GetFormatter(): DataFormatter
+	{
+		return this.formatter;
 	}
 
 	/**
@@ -101,7 +85,7 @@ export class DataValue implements IDataRead< number >, IDataWrite< number >
 	 */
 	public Step(): void
 	{
-		Asserts.Assert( !this.IsMoney && this.divisor > 0, "Step() only allowed on values with a max limit set" );
+		Asserts.Assert( !this.formatter.IsMoney() && this.divisor > 0, "Step() only allowed on values with a max limit set" );
 		this.Set( ( this.value + 1 ) % this.divisor );
 	}
 
@@ -112,14 +96,4 @@ export class DataValue implements IDataRead< number >, IDataWrite< number >
 	{
 		this.callbacks.push( callback );
 	}
-}
-
-export enum DataValueFormat
-{
-	Money = "money",
-	Integer = "integer",
-	Percent = "percent",
-	Decimal = "decimal",
-	DoubleDigit = "doubledigits",
-	Unformatted = "unformatted",
 }
