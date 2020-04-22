@@ -49,7 +49,7 @@ export class TextureManager
 	{
 		Asserts.Assert( !this.subTextures.has( name ), "A render target with the name \"" + name + "\" already exists!" );
 		const texture = new RenderTargetTexture( name, this.renderer, size, useAlpha );
-		this.subTextures.set( name, new SubTexture( texture, [ 0, 0, 1, 1 ] ) );
+		this.subTextures.set( name, texture );
 		return texture;
 	}
 

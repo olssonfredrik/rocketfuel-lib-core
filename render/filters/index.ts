@@ -1,3 +1,4 @@
 export * from "./IFilter";
 export * from "./Filter";
-export * from "./GaussianBlur";
+export * from "./GaussianBlurFilter";
+export * from "./ScaleFilter";

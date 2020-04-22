@@ -11,6 +11,10 @@ export class RenderTargetTexture implements ITexture, IRenderTarget
 	public readonly WebGLFramebuffer: WebGLFramebuffer;
 	public readonly TextureId: string;
 
+	// SubTexture
+	public readonly Texture: ITexture;
+	public readonly Position: Array< number >;
+
 	private readonly WebGLRenderbuffer?: WebGLRenderbuffer;
 	private readonly format: number;
 	private readonly renderbufferFormat: number;
@@ -61,6 +65,8 @@ export class RenderTargetTexture implements ITexture, IRenderTarget
 		this.WebGLFramebuffer = framebuffer;
 		this.Size = size.Clone();
 		this.TextureId = name;
+		this.Texture = this;
+		this.Position = [ 0, 0, 1, 1 ];
 	}
 
 	/**
