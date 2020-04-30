@@ -56,7 +56,15 @@ export class WebGLRenderer
 					break;
 
 				case BlendMode.Additive:
-					gl.blendFunc( WebGL.SRC_ALPHA, WebGL.ONE );
+					gl.blendFunc( WebGL.ONE, WebGL.ONE );
+					break;
+
+				case BlendMode.Multiply:
+					gl.blendFunc( WebGL.DST_COLOR, WebGL.ONE_MINUS_SRC_ALPHA );
+					break;
+
+				case BlendMode.Screen:
+					gl.blendFunc( WebGL.ONE, WebGL.ONE_MINUS_SRC_ALPHA );
 					break;
 
 				default:
