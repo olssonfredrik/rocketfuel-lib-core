@@ -13,29 +13,23 @@ export interface IPixiParticleEvents
 	readonly Stop?: string;
 }
 
+export interface IPixiInterpolatedNumber
+{
+	readonly start?: number;
+	readonly end?: number;
+	readonly list?: Array< { readonly value: number, readonly time: number } >;
+	readonly isStepped?: boolean;
+}
+
 export interface IPixiParticleSystemData
 {
-	readonly alpha:
-	{
-		readonly start: number;
-		readonly end: number;
-	};
-	readonly scale:
-	{
-		readonly start: number;
-		readonly end: number;
-		readonly minimumScaleMultiplier: number;
-	};
+	readonly alpha: IPixiInterpolatedNumber;
+	readonly scale: IPixiInterpolatedNumber & { readonly minimumScaleMultiplier: number };
+	readonly speed: IPixiInterpolatedNumber & { readonly minimumSpeedMultiplier: number };
 	readonly color:
 	{
 		readonly start: string;
 		readonly end: string;
-	};
-	readonly speed:
-	{
-		readonly start: number;
-		readonly end: number;
-		readonly minimumSpeedMultiplier: number;
 	};
 	readonly acceleration:
 	{

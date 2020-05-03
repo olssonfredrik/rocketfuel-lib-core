@@ -1,6 +1,6 @@
 import { Point2D, Transform } from "../../math";
 import { Random } from "../../util";
-import { IPixiParticleSystemData } from "./IPixiParticleSystemData";
+import { IPixiInterpolatedNumber, IPixiParticleSystemData } from "./IPixiParticleSystemData";
 import { Particle } from "./Particle";
 
 export class PixiParticleSystem
@@ -37,9 +37,9 @@ export class PixiParticleSystem
 		this.spawnCost = data.frequency;
 		this.data = data;
 		this.ParseColor( this.colorStart, data.color.start );
-		this.colorStart[ 3 ] = data.alpha.start;
+		this.colorStart[ 3 ] = this.GetInterpolatedData( data.alpha, 0 );
 		this.ParseColor( this.colorEnd, data.color.end );
-		this.colorEnd[ 3 ] = data.alpha.end;
+		this.colorEnd[ 3 ] = this.GetInterpolatedData( data.alpha, 1 );
 		this.life = data.emitterLifetime;
 		this.enabled = false;
 	}
@@ -183,7 +183,7 @@ export class PixiParticleSystem
 
 		particle.RotationSpeed = Random.Range( this.data.rotationSpeed.min, this.data.rotationSpeed.max ) * this.degreesToRadians;
 		particle.Rotation = ( 360 - Random.Range( this.data.startRotation.min, this.data.startRotation.max ) ) * this.degreesToRadians;
-		const speed = particle.SpeedFactor * this.data.speed.start;
+		const speed = particle.SpeedFactor * this.GetInterpolatedData( this.data.speed, 0 );
 		particle.Velocity.SetValues( speed * Math.cos( particle.Rotation ), speed * Math.sin( particle.Rotation ) );
 
 		// rotate velocity
@@ -201,12 +201,16 @@ export class PixiParticleSystem
 		const data = this.data;
 		const lerp = 1.0 - particle.Life * particle.NormalizedLifeFactor;
 
-		particle.Scale = this.Lerp( data.scale.start, data.scale.end, lerp ) * particle.ScaleFactor;
+		particle.Scale = this.GetInterpolatedData( data.scale, lerp ) * particle.ScaleFactor;
 		this.LerpArray( particle.Color, this.colorStart, this.colorEnd, lerp );
-
-		if( data.speed.start !== data.speed.end )
+		if( !!data.alpha.list )
 		{
-			const speed = this.Lerp( data.speed.start, data.speed.end, lerp ) * particle.SpeedFactor;
+			particle.Color[ 3 ] = this.GetInterpolatedData( data.alpha, lerp );
+		}
+
+		if( data.speed.start !== data.speed.end || !!data.speed.list )
+		{
+			const speed = this.GetInterpolatedData( data.speed, lerp ) * particle.SpeedFactor;
 			particle.Velocity.Normalize();
 			particle.Velocity.Scale( speed );
 		}
@@ -239,6 +243,37 @@ export class PixiParticleSystem
 	/**
 	 *
 	 */
+	private GetInterpolatedData( data: IPixiInterpolatedNumber, factor: number ): number
+	{
+		if( !!data.list )
+		{
+			if( factor <= 0 )
+			{
+				return data.list[ 0 ].value;
+			}
+			if( factor >= 1 )
+			{
+				return data.list[ data.list.length - 1 ].value;
+			}
+			for( let i = 1; i < data.list.length; i++ )
+			{
+				if( data.list[ i ].time >= factor )
+				{
+					const fromItem = data.list[ i - 1 ];
+					const toItem = data.list[ i ];
+					return this.Lerp( fromItem.value, toItem.value, ( factor - fromItem.time ) / ( toItem.time - fromItem.time ) );
+				}
+			}
+		}
+
+		const from = data.start ?? 0;
+		const to = data.end ?? 0;
+		return this.Lerp( from, to, factor );
+	}
+
+	/**
+	 *
+	 */
 	private Lerp( from: number, to: number, factor: number ): number
 	{
 		return from + factor * ( to - from );
@@ -264,6 +299,7 @@ export class PixiParticleSystem
 		output[ 0 ] = ( ( full & 0xff0000 ) >> 16 ) / 255;
 		output[ 1 ] = ( ( full & 0xff00 ) >> 8 ) / 255;
 		output[ 2 ] = ( full & 0xff ) / 255;
+		output[ 3 ] = 1.0;
 	}
 
 }
