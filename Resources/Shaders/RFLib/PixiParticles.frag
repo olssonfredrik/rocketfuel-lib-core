@@ -9,5 +9,6 @@ uniform mat4 uColorMatrix;
 void main( void )
 {
 	vec4 color = texture2D( uTexture0, vTextureCoord );
-	gl_FragColor = color * vTint * uColorMatrix;
+	vec4 tint = vec4( vTint.rgb * vTint.a, vTint.a );
+	gl_FragColor = color * tint * uColorMatrix;
 }
