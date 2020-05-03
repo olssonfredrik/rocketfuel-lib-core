@@ -163,10 +163,19 @@ export class PixiParticleSystem
 	 */
 	private SpawnParticle( particle: Particle )
 	{
+		const pixiScale = 0.0125;
 		const life = Random.Range( this.data.lifetime.min, this.data.lifetime.max );
 		particle.Life = life;
 		particle.NormalizedLifeFactor = 1 / life;
-		particle.Position.SetValues( this.data.pos.x, this.data.pos.y );
+
+		let x = this.data.pos.x;
+		let y = -this.data.pos.y;
+		if( this.data.spawnType === "rect" )
+		{
+			x += this.data.spawnRect.x + ( Math.random() - 0.5 ) * this.data.spawnRect.w;
+			y += -this.data.spawnRect.y + ( Math.random() - 0.5 ) * this.data.spawnRect.h;
+		}
+		particle.Position.SetValues( x / pixiScale, y / pixiScale );
 		// particle.Position.Add( this.data.spawnPosition )
 		particle.ScaleFactor = Random.Range( this.data.scale.minimumScaleMultiplier, 1.0 );
 		particle.SpeedFactor = Random.Range( this.data.speed.minimumSpeedMultiplier, 1.0 );
