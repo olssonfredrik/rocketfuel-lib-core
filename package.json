@@ -1,6 +1,6 @@
 {
 	"name": "@rocketfuel/core",
-	"version": "0.4.4",
+	"version": "0.4.5",
 	"description": "The main library when making an app/game using RocketFuel.",
 	"repository": {
 		"type": "git",
