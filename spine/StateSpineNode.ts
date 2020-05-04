@@ -17,13 +17,8 @@ export class StateSpineNode extends SpineNode
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
 		const node = new StateSpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.StartState );
-		Object.keys( nodeConfig.Overrides ?? {} ).forEach( ( key ) =>
-		{
-			const value = JSONUtil.GetAssertedJSONObject( nodeConfig.Overrides ?? {}, key );
-			const parts = key.split( ":" );
-			node.OverrideNode( parts[ 0 ], parts[ 1 ], engine.NodeFactory.Create( engine, value ) );
-		} );
 
+		SpineNode.Override( node, engine, nodeConfig.Overrides );
 		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.SetState( event.State ) ) );
 
 		return node;

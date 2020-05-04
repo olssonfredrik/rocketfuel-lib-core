@@ -21,17 +21,25 @@ export class SpineNode extends CompositeNode
 		const nodeConfig = JSONUtil.AsType< ISpineNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
-		const node = new SpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader );
-		Object.keys( nodeConfig.Overrides ?? {} ).forEach( ( key ) =>
-		{
-			const value = JSONUtil.GetAssertedJSONObject( nodeConfig.Overrides ?? {}, key );
-			const parts = key.split( ":" );
-			node.OverrideNode( parts[ 0 ], parts[ 1 ], engine.NodeFactory.Create( engine, value ) );
-		} );
+		const node = new SpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.Mixing );
 
+		SpineNode.Override( node, engine, nodeConfig.Overrides );
 		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.Play( event.Animation, event.Loop ?? false ) ) );
 
 		return node;
+	}
+
+	/**
+	 *
+	 */
+	public static Override( node: SpineNode, engine: Engine, config: IJSONObject = {} ): void
+	{
+		Object.keys( config ).forEach( ( key ) =>
+		{
+			const value = JSONUtil.GetAssertedJSONObject( config, key );
+			const parts = key.split( ":" );
+			node.OverrideNode( parts[ 0 ], parts[ 1 ], engine.NodeFactory.Create( engine, value ) );
+		} );
 	}
 
 	private transform: Transform = new Transform();
