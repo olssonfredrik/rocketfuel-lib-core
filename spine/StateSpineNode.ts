@@ -16,7 +16,7 @@ export class StateSpineNode extends SpineNode
 		const nodeConfig = JSONUtil.AsType< IStateSpineNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
-		const node = new StateSpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.StartState );
+		const node = new StateSpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.StartState, nodeConfig.Mixing );
 
 		SpineNode.Override( node, engine, nodeConfig.Overrides );
 		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.SetState( event.State ) ) );
@@ -29,9 +29,10 @@ export class StateSpineNode extends SpineNode
 	/**
 	 * Creates an instance of StateSpineNode.
 	 */
-	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader, startState: string )
+	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader, startState: string,
+						mixing?: IAnimationMixData )
 	{
-		super( name, skeleton, eventManager, shaderManager, shader );
+		super( name, skeleton, eventManager, shaderManager, shader, mixing );
 		this.state = new SpineState( this, startState );
 	}
 
@@ -68,10 +69,17 @@ interface IStateSpineNodeConfig
 	Shader?: string;
 	Overrides?: IJSONObject;
 	Events?: Array< IEventAnimation >;
+	Mixing?: IAnimationMixData;
 }
 
 interface IEventAnimation
 {
 	Id: string;
 	State: string;
+}
+
+interface IAnimationMixData
+{
+	DefaultDuration?: number;
+	List?: Array< { From: string, To: string, Duration: number } >;
 }

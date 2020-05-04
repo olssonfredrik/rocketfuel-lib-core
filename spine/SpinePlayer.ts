@@ -27,7 +27,9 @@ export class SpinePlayer implements IPlayer
 	public Play( animation: string, loop: boolean = false ): Promise< boolean >
 	{
 		Asserts.Assert( !this.stopFlag, "Don't trigger a Play on a stopped Promise." );
-		this.Stop();
+
+		// Todo: Only resolving won't trigger any remaining events in the animation
+		this.Resolve();
 
 		const track = this.animationState.setAnimation( 0, animation, loop );
 		track.loop = track.loop && ( track.animation.duration > 0 );
@@ -65,11 +67,12 @@ export class SpinePlayer implements IPlayer
 		const track = this.animationState.tracks[ 0 ];
 		if( !!track )
 		{
+			const flag = this.stopFlag;
 			this.stopFlag = true;
 			track.loop = false;
 			this.animationState.update( track.animationEnd - track.getAnimationTime() );
-			track.listener.complete( track );
-			this.stopFlag = false;
+			this.stopFlag = flag;
+			this.Resolve();
 		}
 	}
 
@@ -79,5 +82,20 @@ export class SpinePlayer implements IPlayer
 	public HasAnimation( name: string ): boolean
 	{
 		return !!this.animationData.findAnimation( name );
+	}
+
+	/**
+	 * Send the 'complete' event for the currently playing animation.
+	 */
+	private Resolve(): void
+	{
+		const track = this.animationState.tracks[ 0 ];
+		if( !!track )
+		{
+			const flag = this.stopFlag;
+			this.stopFlag = true;
+			track.listener.complete( track );
+			this.stopFlag = flag;
+		}
 	}
 }

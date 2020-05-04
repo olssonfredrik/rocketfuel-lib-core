@@ -48,6 +48,10 @@ export class SpineState
 			}
 			else
 			{
+				if( force )
+				{
+					this.spine.Stop();
+				}
 				return this.spine.Play( state, true );
 			}
 		}

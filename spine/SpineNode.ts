@@ -54,13 +54,19 @@ export class SpineNode extends CompositeNode
 	/**
 	 * Creates an instance of SpineNode.
 	 */
-	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader )
+	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader, mixing?: IAnimationMixData )
 	{
 		super( name );
 
 		// Create an AnimationState, and set the initial animation in looping mode.
 		const animationStateData = new spine.AnimationStateData( skeleton.data );
 		const animationState = new spine.AnimationState( animationStateData );
+
+		if( !!mixing )
+		{
+			animationStateData.defaultMix = mixing.DefaultDuration ?? 0;
+			mixing.List?.forEach( ( mixItem ) => animationStateData.setMix( mixItem.From, mixItem.To, mixItem.Duration ) );
+		}
 
 		this.player = new SpinePlayer( animationState, skeleton.data, eventManager );
 		this.clipShader = shaderManager.Get( "RFLib/SolidColor" );
@@ -257,6 +263,7 @@ interface ISpineNodeConfig
 	Shader?: string;
 	Overrides?: IJSONObject;
 	Events?: Array< IEventAnimation >;
+	Mixing?: IAnimationMixData;
 }
 
 interface IEventAnimation
@@ -264,4 +271,10 @@ interface IEventAnimation
 	Id: string;
 	Animation: string;
 	Loop?: boolean;
+}
+
+interface IAnimationMixData
+{
+	DefaultDuration?: number;
+	List?: Array< { From: string, To: string, Duration: number } >;
 }
