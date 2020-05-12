@@ -1,12 +1,15 @@
 import { DataManager } from "../data";
 import { Asserts, IJSONObject, JSONUtil, MapUtil } from "../util";
 import { DynamicTextItem } from "./DynamicTextItem";
+import { IMutableTextItem } from "./IMutableTextItem";
 import { ITextItem } from "./ITextItem";
+import { MutableTextItem } from "./MutableTextItem";
 import { StaticTextItem } from "./StaticTextItem";
 
 export class TextManager
 {
 	private readonly textItems: Map< string, ITextItem >;
+	private readonly mutableItems: Map< string, IMutableTextItem >;
 
 	/**
 	 *
@@ -14,6 +17,7 @@ export class TextManager
 	public constructor()
 	{
 		this.textItems = new Map< string, ITextItem >();
+		this.mutableItems = new Map< string, IMutableTextItem >();
 	}
 
 	/**
@@ -28,10 +32,20 @@ export class TextManager
 	/**
 	 *
 	 */
+	public SetMutable( id: string, text: string ): void
+	{
+		const item = MapUtil.AssertedGet( this.mutableItems, id, "Failed to find mutable text with id: \"" + id + "\"." );
+		item.SetText( text );
+	}
+
+	/**
+	 *
+	 */
 	public Init( locale: string, dataManager: DataManager, data: IJSONObject ): void
 	{
 		const config = JSONUtil.AsType< ITextManagerConfig >( data );
 		const localeList = this.CreateLocaleList( locale );
+		const delayedInit = new Array< DynamicTextItem >();
 
 		Object.keys( config.Data ).forEach( ( id: string ) =>
 		{
@@ -40,15 +54,25 @@ export class TextManager
 			let text = textData.Text;
 			localeList.forEach( ( loc ) => text = JSONUtil.GetOrDefault( textData.Localized, loc, text ) );
 
-			if( text.indexOf( "{" ) >= 0 )
+			if( textData.Mutable ?? false )
 			{
-				this.textItems.set( id, new DynamicTextItem( text, dataManager ) );
+				const item = new MutableTextItem( text );
+				this.textItems.set( id, item );
+				this.mutableItems.set( id, item );
+			}
+			else if( text.indexOf( "{" ) >= 0 )
+			{
+				const item = new DynamicTextItem( text );
+				delayedInit.push( item );
+				this.textItems.set( id, item );
 			}
 			else
 			{
 				this.textItems.set( id, new StaticTextItem( text ) );
 			}
 		} );
+
+		delayedInit.forEach( ( item ) => item.Init( dataManager, this ) );
 	}
 
 	/**
@@ -87,4 +111,5 @@ interface ITextItemConfig
 {
 	Text: string;
 	Localized?: IJSONObject;
+	Mutable?: boolean;
 }

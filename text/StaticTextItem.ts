@@ -2,7 +2,7 @@ import { ITextItem } from "./ITextItem";
 
 export class StaticTextItem implements ITextItem
 {
-	private text: string;
+	private readonly text: string;
 
 	/**
 	 *

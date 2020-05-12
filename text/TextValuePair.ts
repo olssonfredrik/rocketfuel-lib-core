@@ -1,6 +1,7 @@
 import { IDataRead } from "../data";
+import { IDynamicText } from "./IDynamicText";
 
-export class TextValuePair
+export class TextValuePair implements IDynamicText
 {
 	private readonly text: string;
 	private readonly value: IDataRead< number >;
