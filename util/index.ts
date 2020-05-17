@@ -6,3 +6,4 @@ export * from "./MapUtil";
 export * from "./Random";
 export * from "./ShaderHelper";
 export * from "./NodeUtil";
+export * from "./PromiseUtil";

@@ -9,17 +9,21 @@ export class EventManager
 	/**
 	 *
 	 */
-	public Send( event: IEvent )
+	public Send( event: IEvent, logging: boolean = true )
 	{
 		this.events.push( event );
-		const message = "Event:";
-		if( !!event.Params )
+
+		if( logging )
 		{
-			Logging.Log( message, event.EventId, event.Params );
-		}
-		else
-		{
-			Logging.Log( message, event.EventId );
+			const message = "Event:";
+			if( !!event.Params )
+			{
+				Logging.Log( message, event.EventId, event.Params );
+			}
+			else
+			{
+				Logging.Log( message, event.EventId );
+			}
 		}
 	}
 

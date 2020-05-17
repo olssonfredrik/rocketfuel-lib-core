@@ -53,14 +53,6 @@ export class DataManager
 	/**
 	 *
 	 */
-	public Update( deltaTime: number ): void
-	{
-		this.views.forEach( ( view ) => view.Update( deltaTime ) );
-	}
-
-	/**
-	 *
-	 */
 	public Init( data: IJSONObject, eventManager: EventManager )
 	{
 		const dataObject = JSONUtil.AsType< IDataManagerConfig >( data );
@@ -130,6 +122,20 @@ export class DataManager
 			Asserts.Assert( args.length === 1, "Incorrect number of parameters to \"DataManager:StepValue\" event." );
 			this.GetWrite( "Value", args[ 0 ] as string ).Step();
 		} );
+
+		eventManager.Subscribe( "Engine:EndFrame", ( eventId, args ) =>
+		{
+			Asserts.AssertDefined( args, "No parameters defined" );
+			this.Update( args[ 0 ] as number );
+		} );
+	}
+
+	/**
+	 *
+	 */
+	private Update( deltaTime: number ): void
+	{
+		this.views.forEach( ( view ) => view.Update( deltaTime ) );
 	}
 
 	/**

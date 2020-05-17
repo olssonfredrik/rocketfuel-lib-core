@@ -5,8 +5,8 @@ export class DeferredPromise< T >
 	 */
 	public static Create< T >(): DeferredPromise< T >
 	{
-		let resolve = ( value: T ) => {};
-		let reject = ( value: T ) => {};
+		let resolve = ( value?: T ) => {};
+		let reject = ( value?: T ) => {};
 		const promise = new Promise< T >( ( res, rej ) =>
 		{
 			resolve = res;
@@ -18,13 +18,13 @@ export class DeferredPromise< T >
 
 	public Promise: Promise< T >;
 
-	private resolveFunction: ( value: T ) => void;
-	private rejectFunction: ( value: T ) => void;
+	private resolveFunction: ( value?: T ) => void;
+	private rejectFunction: ( value?: T ) => void;
 
 	/**
 	 *
 	 */
-	private constructor( promise: Promise< T >, resolve: ( value: T ) => void, reject: ( value: T ) => void )
+	private constructor( promise: Promise< T >, resolve: ( value?: T ) => void, reject: ( value?: T ) => void )
 	{
 		this.Promise = promise;
 		this.resolveFunction = resolve;
@@ -34,7 +34,7 @@ export class DeferredPromise< T >
 	/**
 	 *
 	 */
-	public Resolve( value: T ): void
+	public Resolve( value?: T ): void
 	{
 		this.resolveFunction( value );
 	}
@@ -42,7 +42,7 @@ export class DeferredPromise< T >
 	/**
 	 *
 	 */
-	public Reject( value: T ): void
+	public Reject( value?: T ): void
 	{
 		this.rejectFunction( value );
 	}

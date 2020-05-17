@@ -10,6 +10,7 @@ import { SoundManager } from "../sound";
 import { SpineManager } from "../spine";
 import { TextManager } from "../text";
 import { Asserts, JSONUtil } from "../util";
+import { Utils } from "../util/Utils";
 import { Analytics } from "./Analytics";
 import { Camera } from "./Camera";
 import { EventManager } from "./EventManager";
@@ -73,6 +74,7 @@ export class Engine
 		HtmlHelper.ListenerToEvent( this.EventManager );
 		this.EventManager.Subscribe( "Page:Reload", () => HtmlHelper.Reload() );
 		this.EventManager.Subscribe( "Page:OpenUrl", ( id, args ) => HtmlHelper.OpenUrl( args?.[ 0 ] as string ) );
+		Utils.Init( this.EventManager );
 
 		this.DownloadManager = new DownloadManager( this.EventManager, config.resource_server, config.resource_file );
 		this.inited = this.DownloadManager.Ready().then( () =>
@@ -135,8 +137,8 @@ export class Engine
 		this.Renderer.EndFrame();
 
 		this.InputManager.Process( this.camera );
+		this.EventManager.Send( { EventId: "Engine:EndFrame", Params: [ deltaTime ] }, false );
 		this.EventManager.Flush();
-		this.DataManager.Update( deltaTime );
 	}
 
 	/**

@@ -18,6 +18,7 @@ export class DataViewLinear implements IDataView
 	 */
 	public constructor( data: IDataRead< number >, jsonConfig: IJSONObject )
 	{
+		// Todo: re-write to use EasingAnimation
 		const config = JSONUtil.AsType< IDataViewLinearConfig >( jsonConfig );
 		this.oldValue = data.Get();
 		this.newValue = data.Get();
@@ -26,6 +27,13 @@ export class DataViewLinear implements IDataView
 		this.max = config.Duration;
 		this.up = config.Up ?? true;
 		this.down = config.Down ?? true;
+
+		data.OnChange( ( value ) =>
+		{
+			this.oldValue = this.Get();
+			this.newValue = value;
+			this.Restart();
+		} );
 	}
 
 	/**
@@ -33,13 +41,6 @@ export class DataViewLinear implements IDataView
 	 */
 	public Update( deltaTime: number ): void
 	{
-		const value = this.data.Get();
-		if( this.newValue !== value )
-		{
-			this.oldValue = this.Get();
-			this.newValue = value;
-			this.Restart();
-		}
 		this.time += deltaTime;
 	}
 
