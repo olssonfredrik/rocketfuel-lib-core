@@ -28,8 +28,8 @@ export class TextDownloader extends Downloader
 			}
 		};
 
-		request.onerror = () => this.Fail( "http_" + request.status );
-		request.ontimeout = () => this.Fail( "http_" + request.status );
+		request.onerror = () => this.Fail( "http_error" );
+		request.ontimeout = () => this.Fail( "http_timeout" );
 
 		window.setTimeout( () => { request.send(); }, 0 );
 	}
