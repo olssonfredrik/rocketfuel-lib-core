@@ -149,7 +149,7 @@ export class Engine
 		if( this.isRunning )
 		{
 			const time = performance.now();
-			this.Frame( ( time - this.lastTime ) * 0.001 );
+			this.Frame( Math.min( 1, ( time - this.lastTime ) * 0.001 ) );
 			this.lastTime = time;
 		}
 		else
