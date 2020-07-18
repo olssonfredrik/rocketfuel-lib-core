@@ -5,6 +5,8 @@ import { Asserts } from "../util";
 
 export class SpinePlayer implements IPlayer
 {
+	private readonly eventPrefix: string;
+
 	private animationState: spine.AnimationState;
 	private animationData: spine.SkeletonData;
 	private eventManager: EventManager;
@@ -13,12 +15,13 @@ export class SpinePlayer implements IPlayer
 	/**
 	 *
 	 */
-	public constructor( state: spine.AnimationState, data: spine.SkeletonData, eventManager: EventManager )
+	public constructor( state: spine.AnimationState, data: spine.SkeletonData, eventManager: EventManager, eventPrefix?: string )
 	{
 		this.animationState = state;
 		this.animationData = data;
 		this.eventManager = eventManager;
 		this.stopFlag = false;
+		this.eventPrefix = eventPrefix ?? "";
 	}
 
 	/**
@@ -50,7 +53,7 @@ export class SpinePlayer implements IPlayer
 					else
 					{
 						const params = event.stringValue.length > 0 ? JSON.parse( event.stringValue ) : undefined;
-						this.eventManager.Send( { EventId: name, Params: params } );
+						this.eventManager.Send( { EventId: this.eventPrefix + name, Params: params } );
 					}
 				},
 				interrupt: ( entry ) => {},

@@ -4,7 +4,7 @@ import { Camera, Engine, EventManager } from "../engine";
 import { Transform } from "../math";
 import { CompositeNode, INode } from "../nodes";
 import { IPlayer } from "../player";
-import { Shader, ShaderManager, TextureManager, WebGLRenderer } from "../render";
+import { Shader, ShaderManager, WebGLRenderer } from "../render";
 import { IJSONObject, JSONUtil, Logging } from "../util";
 import { ClipAttachment, MeshAttachment, NodeAttachment, RegionAttachment } from "./attachment";
 import { SpineHelper } from "./SpineHelper";
@@ -21,7 +21,7 @@ export class SpineNode extends CompositeNode
 		const nodeConfig = JSONUtil.AsType< ISpineNodeConfig >( config );
 		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
-		const node = new SpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.Mixing );
+		const node = new SpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.Mixing, nodeConfig.EventPrefix );
 
 		SpineNode.Override( node, engine, nodeConfig.Overrides );
 		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.Play( event.Animation, event.Loop ?? false ) ) );
@@ -54,7 +54,8 @@ export class SpineNode extends CompositeNode
 	/**
 	 * Creates an instance of SpineNode.
 	 */
-	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader, mixing?: IAnimationMixData )
+	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader,
+						mixing?: IAnimationMixData, eventPrefix?: string )
 	{
 		super( name );
 
@@ -68,7 +69,7 @@ export class SpineNode extends CompositeNode
 			mixing.List?.forEach( ( mixItem ) => animationStateData.setMix( mixItem.From, mixItem.To, mixItem.Duration ) );
 		}
 
-		this.player = new SpinePlayer( animationState, skeleton.data, eventManager );
+		this.player = new SpinePlayer( animationState, skeleton.data, eventManager, eventPrefix );
 		this.clipShader = shaderManager.Get( "RFLib/SolidColor" );
 		this.skeleton = skeleton;
 		this.animationState = animationState;
@@ -264,6 +265,7 @@ interface ISpineNodeConfig
 	Overrides?: IJSONObject;
 	Events?: Array< IEventAnimation >;
 	Mixing?: IAnimationMixData;
+	EventPrefix?: string;
 }
 
 interface IEventAnimation
