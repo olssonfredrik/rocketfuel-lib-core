@@ -53,7 +53,7 @@ export class PixiParticleSystemNode extends LeafNode
 		const offsets = data.Textures.map( ( id ) => engine.TextureManager.TextureOffset( id ) );
 
 		this.textures = data.Textures;
-		this.shader = engine.ShaderManager.Get( data.Shader );
+		this.shader = engine.ShaderManager.Get( data.Shader ?? "RFLib/PixiParticles" );
 		this.textureManager = engine.TextureManager;
 		this.system = new PixiParticleSystem( data.System, sizes, offsets );
 

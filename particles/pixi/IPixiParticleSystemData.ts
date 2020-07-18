@@ -2,9 +2,9 @@ export interface IPixiParticleSystemNodeData
 {
 	readonly Name: string;
 	readonly Textures: Array< string >;
-	readonly Shader: string;
-	readonly Events: IPixiParticleEvents;
 	readonly System: IPixiParticleSystemData;
+	readonly Shader?: string;
+	readonly Events?: IPixiParticleEvents;
 }
 
 export interface IPixiParticleEvents
