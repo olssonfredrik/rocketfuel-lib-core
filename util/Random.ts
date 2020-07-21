@@ -39,4 +39,24 @@ export class Random
 	{
 		return Math.round( from + Math.random() * ( to - from ) );
 	}
+
+	/**
+	 * Shuffle array in place
+	 */
+	public static ShuffleArray< T >( array: Array< T > ): Array< T >
+	{
+		let currentIndex = array.length;
+
+		while( currentIndex > 0 )
+		{
+			const targetIndex = Math.floor( Math.random() * currentIndex );
+			currentIndex--;
+
+			const temp = array[currentIndex];
+			array[currentIndex] = array[targetIndex];
+			array[targetIndex] = temp;
+		}
+
+		return array;
+	}
 }
