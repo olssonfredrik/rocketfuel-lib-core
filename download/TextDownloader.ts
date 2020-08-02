@@ -3,6 +3,17 @@ import { DownloaderState } from "./DownloaderState";
 
 export class TextDownloader extends Downloader
 {
+	private timeout: number;
+
+	/**
+	 *
+	 */
+	public constructor( url: string, timeout: number = 0 )
+	{
+		super( url );
+		this.timeout = timeout;
+	}
+
 	/**
 	 *
 	 */
@@ -11,7 +22,7 @@ export class TextDownloader extends Downloader
 		this.state = DownloaderState.Downloading;
 		const request = new XMLHttpRequest();
 		request.open( "GET", this.GetUrl(), true );
-		request.timeout = 5000;
+		request.timeout = this.timeout;
 		request.responseType = "text";
 
 		request.onload = () =>
