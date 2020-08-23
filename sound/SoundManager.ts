@@ -1,3 +1,4 @@
+import { Howler } from "howler";
 import { DataManager } from "../data";
 import { EventManager } from "../engine";
 import { Asserts, IJSONObject, JSONUtil } from "../util";

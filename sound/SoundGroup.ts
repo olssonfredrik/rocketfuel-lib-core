@@ -1,4 +1,4 @@
-import { Howl } from "howler";
+import { Howl, HowlOptions } from "howler";
 import { DataManager } from "../data";
 import { EventManager } from "../engine";
 import { Asserts, DeferredPromise, IJSONObject, JSONUtil, MapUtil } from "../util";
@@ -181,13 +181,13 @@ export class SoundGroup
 	private AddSound( id: string, sources: Array< string >, loop: boolean = false )
 	{
 		sources = sources.map( ( value ) => this.server + value );
-		const howlProperties: IHowlProperties =
+		const howlOptions: HowlOptions =
 		{
 			src: sources,
 			preload: false,
 			loop: loop,
 		};
-		this.sounds.set( id, new Howl( howlProperties ) );
+		this.sounds.set( id, new Howl( howlOptions ) );
 		this.loaded = false;
 	}
 }
