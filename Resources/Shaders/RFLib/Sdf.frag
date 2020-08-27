@@ -1,6 +1,5 @@
-#ifdef GL_OES_standard_derivatives
 #extension GL_OES_standard_derivatives : enable
-#endif
+
 precision mediump float;
 
 uniform sampler2D uTexture0;
@@ -18,14 +17,10 @@ const float cos45 = 0.70710678118654752;
 vec3 aasmoothstep( vec3 smoothing, vec3 threshold, float value )
 {
 	float fullDistance = clamp( (value - 0.5) * 2.0, -1.0, 0.999 );
-#ifdef GL_OES_standard_derivatives
 	vec3 width = (length( vec2( dFdx( value ), dFdy( value ) ) ) * cos45) * smoothing;
 	return vec3( smoothstep(threshold.x - width.x, threshold.x + width.x, fullDistance),
 				smoothstep(threshold.y - width.y, threshold.y + width.y, fullDistance),
 				smoothstep(threshold.z - width.z, threshold.z + width.z, fullDistance) );
-#else
-	return vec3( step(threshold.x, fullDistance), step(threshold.y, fullDistance), step(threshold.z, fullDistance) );
-#endif
 }
 
 void main( void )
