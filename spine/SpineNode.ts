@@ -5,7 +5,7 @@ import { Transform } from "../math";
 import { CompositeNode, INode } from "../nodes";
 import { IPlayer } from "../player";
 import { Shader, ShaderManager, WebGLRenderer } from "../render";
-import { IJSONObject, JSONUtil, Logging } from "../util";
+import { Asserts, IJSONObject, JSONUtil, Logging } from "../util";
 import { ClipAttachment, MeshAttachment, NodeAttachment, RegionAttachment } from "./attachment";
 import { SpineHelper } from "./SpineHelper";
 import { SpinePlayer } from "./SpinePlayer";
@@ -23,8 +23,18 @@ export class SpineNode extends CompositeNode
 		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
 		const node = new SpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.Mixing, nodeConfig.EventPrefix );
 
+		if( !!nodeConfig.Skin )
+		{
+			node.SetSkin( nodeConfig.Skin );
+		}
+
 		SpineNode.Override( node, engine, nodeConfig.Overrides );
-		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.Play( event.Animation, event.Loop ?? false ) ) );
+		nodeConfig.Events?.forEach( ( event ) =>
+		{
+			Asserts.AssertDefined( event.Id );
+			Asserts.AssertDefined( event.Animation );
+			engine.EventManager.Subscribe( event.Id, () => node.Play( event.Animation, event.Loop ?? false ) );
+		} );
 
 		return node;
 	}
@@ -99,6 +109,14 @@ export class SpineNode extends CompositeNode
 	public Stop(): void
 	{
 		this.player.Stop();
+	}
+
+	/**
+	 *
+	 */
+	public SetSkin( skin: string ): void
+	{
+		this.skeleton.setSkinByName( skin );
 	}
 
 	/**
@@ -266,6 +284,7 @@ interface ISpineNodeConfig
 	Events?: Array< IEventAnimation >;
 	Mixing?: IAnimationMixData;
 	EventPrefix?: string;
+	Skin?: string;
 }
 
 interface IEventAnimation

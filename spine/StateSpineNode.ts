@@ -1,11 +1,12 @@
-import { spine } from "esotericsoftware-spine";
-import { Engine, EventManager } from "../engine";
-import { Shader, ShaderManager, TextureManager, WebGLRenderer } from "../render";
-import { IJSONObject, JSONUtil } from "../util";
+import { Camera, Engine } from "../engine";
+import { Transform } from "../math";
+import { INode } from "../nodes";
+import { WebGLRenderer } from "../render";
+import { Asserts, IJSONObject, JSONUtil } from "../util";
 import { SpineNode } from "./SpineNode";
 import { SpineState } from "./SpineState";
 
-export class StateSpineNode extends SpineNode
+export class StateSpineNode implements INode
 {
 
 	/**
@@ -14,26 +15,31 @@ export class StateSpineNode extends SpineNode
 	public static Create( engine: Engine, config: IJSONObject ): StateSpineNode
 	{
 		const nodeConfig = JSONUtil.AsType< IStateSpineNodeConfig >( config );
-		const shader = engine.ShaderManager.Get( nodeConfig.Shader ?? "RFLib/Spine" );
-		const skeleton = engine.SpineManager.GetSkeleton( nodeConfig.Skeleton );
-		const node = new StateSpineNode( nodeConfig.Name, skeleton, engine.EventManager, engine.ShaderManager, shader, nodeConfig.StartState, nodeConfig.Mixing );
+		const spineNode = SpineNode.Create( engine, nodeConfig.SpineConfig );
+		const node = new StateSpineNode( nodeConfig.Name, spineNode, nodeConfig.StartState );
 
-		SpineNode.Override( node, engine, nodeConfig.Overrides );
-		nodeConfig.Events?.forEach( ( event ) => engine.EventManager.Subscribe( event.Id, () => node.SetState( event.State ) ) );
+		nodeConfig.Events?.forEach( ( event ) =>
+		{
+			Asserts.AssertDefined( event.Id );
+			Asserts.AssertDefined( event.State );
+			engine.EventManager.Subscribe( event.Id, () => node.SetState( event.State ) );
+		} );
 
 		return node;
 	}
 
-	private state: SpineState;
+	public readonly Name: string;
+	private readonly state: SpineState;
+	private readonly spine: SpineNode;
 
 	/**
 	 * Creates an instance of StateSpineNode.
 	 */
-	public constructor( name: string, skeleton: spine.Skeleton, eventManager: EventManager, shaderManager: ShaderManager, shader: Shader, startState: string,
-						mixing?: IAnimationMixData )
+	public constructor( name: string, spineNode: SpineNode, startState: string )
 	{
-		super( name, skeleton, eventManager, shaderManager, shader, mixing );
-		this.state = new SpineState( this, startState );
+		this.Name = name;
+		this.spine = spineNode;
+		this.state = new SpineState( spineNode, startState );
 	}
 
 	/**
@@ -59,27 +65,62 @@ export class StateSpineNode extends SpineNode
 	{
 		this.state.Reset();
 	}
+
+	/**
+	 *
+	 */
+	public SetSkin( skin: string ): void
+	{
+		this.spine.SetSkin( skin );
+	}
+
+	/**
+	 *
+	 */
+	public OverrideNode( slotId: string, attachmentId: string, node: INode ): void
+	{
+		this.spine.OverrideNode( slotId, attachmentId, node );
+	}
+
+	/**
+	 *
+	 */
+	public FindNode( name: string ): INode | undefined
+	{
+		if( this.Name === name )
+		{
+			return this;
+		}
+		return this.spine.FindNode( name );
+	}
+
+	/**
+	 *
+	 */
+	public Render( renderer: WebGLRenderer, camera: Camera ): void
+	{
+		this.spine.Render( renderer, camera );
+	}
+
+	/**
+	 *
+	 */
+	public Update( deltaTime: number, transform: Transform, color: Transform ): void
+	{
+		this.spine.Update( deltaTime, transform, color );
+	}
 }
 
 interface IStateSpineNodeConfig
 {
 	Name: string;
-	Skeleton: string;
+	SpineConfig: IJSONObject;
 	StartState: string;
-	Shader?: string;
-	Overrides?: IJSONObject;
-	Events?: Array< IEventAnimation >;
-	Mixing?: IAnimationMixData;
+	Events?: Array< IEventState >;
 }
 
-interface IEventAnimation
+interface IEventState
 {
 	Id: string;
 	State: string;
-}
-
-interface IAnimationMixData
-{
-	DefaultDuration?: number;
-	List?: Array< { From: string, To: string, Duration: number } >;
 }

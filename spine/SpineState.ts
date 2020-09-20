@@ -52,7 +52,7 @@ export class SpineState
 				{
 					this.spine.Stop();
 				}
-				return this.spine.Play( state, true );
+				this.spine.Play( state, true );
 			}
 		}
 		return Promise.resolve( false );
