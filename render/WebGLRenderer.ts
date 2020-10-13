@@ -87,14 +87,15 @@ export class WebGLRenderer
 			gl.depthMask( state );
 		} );
 
+		this.StencilStack = new StencilStack();
+
 		const screen = { Size: this.RenderSize, WebGLFramebuffer: null, TextureId: "", Resize: () => {} };
 		this.RenderTargetStack = new StateStack< IRenderTarget >( screen, ( state: IRenderTarget ) =>
 		{
 			gl.bindFramebuffer( WebGL.FRAMEBUFFER, state.WebGLFramebuffer );
 			gl.viewport( 0, 0, state.Size.X, state.Size.Y );
+			this.StencilStack.Clear( this ); // Todo: should this only be called on push?
 		} );
-
-		this.StencilStack = new StencilStack();
 	}
 
 	/**

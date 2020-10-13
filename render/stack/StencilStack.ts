@@ -71,6 +71,18 @@ export class StencilStack
 	}
 
 	/**
+	 * Clear the current layer
+	 */
+	public Clear( renderer: WebGLRenderer ): void
+	{
+		const gl = renderer.GetContext();
+		gl.clearStencil( this.BASE_LAYER >> this.layer );
+		gl.stencilMask( this.MASK_ALL >> this.layer );
+		gl.clear( WebGLRenderingContext.STENCIL_BUFFER_BIT );
+		gl.stencilMask( this.MASK_NONE );
+	}
+
+	/**
 	 * Reset to layer 0 and clear the stencil
 	 */
 	public Reset( renderer: WebGLRenderer ): void
