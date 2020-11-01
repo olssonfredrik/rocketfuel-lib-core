@@ -41,6 +41,7 @@ export class Engine
 	private lastTime: number = 0;
 	private inited: Promise< void >;
 	private camera: Camera;
+	private timeScale: number = 1.0;
 
 	/**
 	 * Creates an instance of Engine.
@@ -149,7 +150,7 @@ export class Engine
 		if( this.isRunning )
 		{
 			const time = performance.now();
-			this.Frame( Math.min( 1, ( time - this.lastTime ) * 0.001 ) );
+			this.Frame( Math.min( 1, ( time - this.lastTime ) * 0.001 ) * this.timeScale );
 			this.lastTime = time;
 		}
 		else
