@@ -78,24 +78,23 @@ export class TextManager
 	/**
 	 * Creates a prioritized list, from low to high, of locales.
 	 * "en-UK" -> ["en", "en-UK"]
-	 * "x-y-z" -> ["x", "x-y", "x-z", "x-y-z" ]
+	 * "aa-BB-x-test" -> ["aa", "aa-BB", "aa-x-test", "aa-BB-x-test" ]
 	 */
 	private CreateLocaleList( locale: string ): Array< string >
 	{
-		const output = new Array< string >();
+		const [language, region, ...variant] = locale.split( "-" );
 
-		const list = locale.split( "-" );
-		if( list.length > 1 )
+		const output = new Array< string >();
+		if( !!region )
 		{
-			output.push( list[ 0 ] + "-" + list[ 1 ] );
+			output.push( language );
 		}
-		if( list.length > 2 )
+		if( variant.length > 0 )
 		{
-			output.push( list[ 0 ] + "-" + list[ 2 ] );
+			output.push( language + "-" + region );
+			output.push( language + "-" + variant.join( "-" ) );
 		}
 		output.push( locale );
-
-		Asserts.Assert( list.length <= 3, "Locale format not supported!" );
 
 		return output;
 	}
