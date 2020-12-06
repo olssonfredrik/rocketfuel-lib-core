@@ -84,7 +84,8 @@ export class Engine
 			{
 				const data = this.DownloadManager.GetJson( "Config.json" );
 				this.DataManager.Init( JSONUtil.GetAssertedJSONObject( data, "DataManager" ), this.EventManager );
-				this.TextManager.Init( Locale.GetLocale(), this.DataManager, JSONUtil.GetAssertedJSONObject( data, "TextManager" ) );
+				const text = this.DownloadManager.GetJson( "Text.json" );
+				this.TextManager.Init( Locale.GetLocale(), this.DataManager, JSONUtil.GetAssertedJSONObject( text, "TextManager" ) );
 				this.TextureManager.Init( JSONUtil.GetAssertedJSONArray( data, "TextureManager" ), this.DownloadManager );
 				this.ShaderManager.Init( JSONUtil.GetAssertedJSONArray( data, "ShaderManager" ), this.DownloadManager );
 				this.SdfManager.Init( JSONUtil.GetAssertedJSONObject( data, "FontManager" ), this.DownloadManager );
